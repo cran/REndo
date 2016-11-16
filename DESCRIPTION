@@ -1,25 +1,24 @@
 Package: REndo
 Type: Package
-Title: Fitting Linear Models with Endogenous Regressors when No
-        External Instruments are Available
-Version: 1.0
-Date: 2015-12-01
+Title: Fitting Linear Models with Endogenous Regressors using Latent
+        Instrumental Variables
+Version: 1.1
+Date: 2016-11-16
 Author: Raluca Gui,
-    Markus Meierer,
-    Rene Algesheimer
+        Markus Meierer,
+        Rene Algesheimer
 Maintainer: Raluca Gui <raluca.gui@business.uzh.ch>
-Description: Fits linear models with endogenous regressors using Internal
-    Instrumental Variables (IIV) methods. These are statistical techniques to
-    correct for endogeneity when no strong, valid external instrumental variables
-    are available. The first version of the package offers two methods, the Latent
-    Instrumental Variables (Ebbes et al., 2005) and Lewbel's higher moments approach
-    (Lewbel, 1997). In a second version of the package, two other methods will be
-    added, joint estimation using copulas (Park and Gupta, 2012) and multilevel GMM
-    (Kim and Frees, 2007).
-Imports: stats,optimx,mvtnorm,AER,e1071,utils,methods
+Description: Fits linear models with endogenous regressor using latent
+    instrumental variable approaches. The methods included in the package are Lewbel's (1997)
+    higher moments approach as well as Lewbel's (2012) heteroskedasticity approach, Park and Gupta's (2012) joint estimation method that uses Gaussian
+    copula and Kim and Frees's (2007) multilevel generalized method of moment approach that deals with endogeneity in a multilevel setting. 
+    These are statistical techniques to address the endogeneity problem where no external instrumental variables are needed.
+Imports: optimx, mvtnorm, AER,e1071, stats, corpcor, lme4, gmm, lmtest,
+        plyr, sandwich, Matrix
+Depends: methods
 License: GPL-3
 RoxygenNote: 5.0.1
 NeedsCompilation: no
-Packaged: 2015-12-08 22:55:12 UTC; raluca
+Packaged: 2016-11-16 05:54:08 UTC; raluca
 Repository: CRAN
-Date/Publication: 2015-12-09 00:21:19
+Date/Publication: 2016-11-16 10:49:31

@@ -1,13 +1,13 @@
-\name{dataLIV}
-\alias{dataLIV}
+\name{dataLatentIV}
+\alias{dataLatentIV}
 \docType{data}
 \title{
 Simulated Dataset
 }
 \description{
-A dataset with one endogenous, discrete regressor used for exemplifying the use of the Latent Instrumental Variable function \code{\link{liv}}.
+A dataset with one endogenous, discrete regressor used for exemplifying the use of the Latent Instrumental Variable function \code{\link{latentIV}}.
 }
-\usage{data("dataLIV")}
+\usage{data("dataLatentIV")}
 \format{
   A data frame with 2500 observations on the following 3 variables.
   \describe{
@@ -25,5 +25,5 @@ where \code{g0 = 2}, \code{b0 = 3} and \code{a1 = -1}.
 
 \keyword{datasets}
 \seealso{
-\code{\link{liv}}
+\code{\link{latentIV}}
 }

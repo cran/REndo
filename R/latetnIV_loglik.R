@@ -1,4 +1,4 @@
-#'@title Likelihood Estimation for liv
+#'@title Likelihood Estimation for latentIV 
 #'@description Computes the log-likelihood function. Only two groups are considered, since as presented in Ebbes et al (2005) this gives good, unbiased results.
 #'@param theta - a vector of initial values for the parameters of the model to be supplied to the optimization algorithm.
 #'@param y - a vector or matrix containing the dependent variable.
@@ -11,7 +11,7 @@
 #'@author  adapted by Raluca Gui from the code provided by Professor Ebbes during a workshop at Univ. of Zurich in April 2015.
 #'@references Ebbes, P., Wedel,M., Boeckenholt, U., and Steerneman, A. G. M. (2005). 'Solving and testing for regressor-error
 #'(in)dependence when no instruments
-#'
+#'@import mvtnorm
 logL <- function(theta,y,P){
   # parameters
   b00 <- theta[1]

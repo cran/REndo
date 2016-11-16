@@ -1,9 +1,11 @@
 # REndo 
 R Package implementing state of the art methods to controll for endogeneity when no instrumental variables are available.
 
-The first version of the package comprises two methods, the latent instrumental variables (LIV) method proposed by Ebbes et al. (2005), and the higher moments approach proposed by Lewbel (1997). 
+The second version of the pacakge, REndo 1.1, implements four instrument-free methods. These are: the latent instrumental variables method proposed by Ebbes et al. (2005), the higher moments approach proposed by Lewbel (1997) , the joint estimation method using Gaussian copula (Park and Gupta, 2012) and the mixed generalized method of moments proposed by Kim and Frees (2007). The later method can be used to treat endogeneity in multilevel models.
 
-A second verion of the pacakge will incorporate the joint estimation method using Gaussian copulas (Park and Gupta, 2012) and the mixed generalized method of moments proposed by Kim and Frees (2007). The later method can be used to treat endogeneity in multilevel models.
+The names of the two functions implemented in the first version of the package have been changed to the following: 
 
-              
+liv()       ->  latentIV()
+hmlewbel()  ->  higherMomentsIV()
+
 

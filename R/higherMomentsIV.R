@@ -1,5 +1,5 @@
 #'@title  Fitting Linear Models with Endogenous Regressors using Lewbel's Higher Moments Approach
-#'@aliases hmlewbel
+#'@aliases higherMomentsIV
 # Description
 #'@description  Fits linear models with one endogenous regressor using internal instruments built using the approach described in 
 #' Lewbel A. (1997). This is a statistical technique to address the endogeneity problem where no external instrumental
@@ -67,24 +67,25 @@
 #'@author The implementation of the model formula by Raluca Gui based on the paper of Lewbel (1997).
 #'@references  Lewbel, A. (1997). Constructing Instruments for Regressions with Measurement Error when No Additional Data Are Available,
 #' with An Application to Patents and R&D. \emph{Econometrica}, \bold{65(5)}, 1201-1213.
-#'@seealso \code{\link{internalIV}}, \code{\link[AER]{ivreg}}, \code{\link{liv}}
+#'@seealso \code{\link{internalIV}}, \code{\link[AER]{ivreg}}, \code{\link{latentIV}}
 #'@examples 
 #'#load data 
-#'data(dataHMLewbel)
-#'y <- dataHMLewbel$y
-#'X <- cbind(dataHMLewbel$X1,dataHMLewbel$X2)
+#'data(dataHigherMoments)
+#'y <- dataHigherMoments[,1]
+#'X <- cbind(dataHigherMoments[,2],dataHigherMoments[,3])
 #'colnames(X) <- c("X1","X2")
-#'P <- dataHMLewbel$P
+#'P <- dataHigherMoments[,4]
 #'
-#'# call hmlewbel with internal instrument yp = (Y - mean(Y))(P - mean(P))
-#'hmlewbel(y,X,P, G = "x2", IIV = "yp")  
+#'# call higherMomentsIV with internal instrument yp = (Y - mean(Y))(P - mean(P))
+#'higherMomentsIV(y,X,P, G = "x2", IIV = "yp")  
 #'
 #'# build an additional instrument p2 = (P - mean(P))^2  using the internalIV() function 
 #'eiv <- internalIV(y,X,P, G="x2", IIV = "p2")
 #'
-#'# use the additional variable as external instrument in hmlewbel()
-#'h <- hmlewbel(y,X,P,G = "x2",IIV = "yp", EIV=eiv) 
-#'h$coefficients
+#'# use the additional variable as external instrument in higherMomentsIV()
+#'h <- higherMomentsIV(y,X,P,G = "x2",IIV = "yp", EIV=eiv) 
+#'coef(h)
+#'summary(h)
 #'
 #'# get the robust standard errors using robust.se() function from package ivpack
 #'# library(ivpack)
@@ -94,7 +95,7 @@
 #'@export
 
 
-hmlewbel <- function(y,X,P, G = c("x2","x3","lnx","1/x"), IIV = c("g","gp","gy","yp","p2","y2"), EIV=NULL, data=NULL){
+higherMomentsIV <- function(y,X,P, G = NULL, IIV = c("g","gp","gy","yp","p2","y2"), EIV=NULL, data=NULL){
   
   # check to see if any external instruments were provided
   if (!is.null(EIV)) {
@@ -115,7 +116,7 @@ hmlewbel <- function(y,X,P, G = c("x2","x3","lnx","1/x"), IIV = c("g","gp","gy",
   # checkAssumptions(y,X,P,IIV,EIV, data)
   
   # uses ivreg function from \pkg{AER} for users to be able to use afterwards the package ivpack 
-  # hmlewbel should return an object of class "ivreg"
+  # higherMomentsIV should return an object of class "ivreg"
   dataHM <- data.frame(cbind(X,P))
   res <- AER::ivreg(y ~.|X + IV1, data = dataHM, x=TRUE )
   

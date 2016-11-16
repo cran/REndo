@@ -1,5 +1,5 @@
 #'@title  Fitting Linear Models with one Endogenous Regressor using Latent Instrumental Variables
-#'@aliases liv
+#'@aliases latentIV
 # Description
 #'@description  Fits linear models with one endogenous regressor and no additional explanatory variables using the latent instrumental variable approach
 #'presented in Ebbes,P., Wedel,M.,  B\"{o}ckenholt, U., and Steerneman, A. G. M. (2005). This is a statistical technique to address the endogeneity problem where no external instrumental
@@ -8,7 +8,7 @@
 #
 # Arguments
 #'@param    formula  an object of type 'formula': a symbolic description of the model to be fitted. Example \code{var1 ~ var2}, where \code{var1} is a vector
-#' containing the dependent variable, while \code{var2} is a vector containing the endogenous variable.
+#' containing the dependent variable, while \code{var2} is a vector containing the endogenous variable. An intercept is included by default.
 #'@param    data  optional data frame or list containing the variables of the model.
 #'@param    param  a vector of initial values for the parameters of the model to be supplied to the optimization algorithm. In any model there are eight parameters.
 #'The first parameter is the intercept, then the coefficient of the endogenous variable followed by the means of the two groups of the latent IV (they need to be different, otherwise model is not identified),
@@ -20,11 +20,11 @@
 #' \deqn{Y_{t} = \beta_{0} + \alpha P_{t} + \epsilon_{t}}{Y_t = b0 + a * P_t + eps_t}
 #' \deqn{P_{t}=\pi^{'}Z_{t} + \nu_{t}}{P_t = pi * Z_t + nu_t}
 #' where \code{t = 1,..,T} indexes either time or cross-sectional units, \eqn{Y_{t}}{Y_t} is the dependent variable, \eqn{P_{t}}{P_t} is a \code{k x 1} continuous, endogenous regressor, 
-#' \eqn{\epsilon_{t}}{epsilon_t} is a structural error term with mean zero and \eqn{E(\epsilon^{2})=\sigma^{2}_{\epsilon}}{E(eps^2) = sigma_eps^2}, \eqn{\alpha}{a} and \eqn{\beta}{b0}
+#' \eqn{\epsilon_{t}} is a structural error term with mean zero and \eqn{E(\epsilon^{2})=\sigma^{2}_{\epsilon}}{E(eps^2) = sigma_eps^2}, \eqn{\alpha}{a} and \eqn{\beta}{b0}
 #' are model parameters. \eqn{Z_{t}}{Z_t} is a \code{l x 1} vector of instruments, and \eqn{\nu_{t}}{nu} is a random error with mean zero and \eqn{E(\nu^{2}) = \sigma^{2}_{\nu}}{E(nu^2) = sigma_nu^2}. 
 #' The endogeneity problem arises from the correlation of \code{P} and \eqn{\epsilon_{t}}{eps} through \eqn{E(\epsilon\nu) = \sigma_{\epsilon\nu}}{E(eps * nu) = sigma_0^2}.
 #' 
-#' LIV  considers \eqn{Z_{t}^{'}}{Z_t} to be a latent, discrete, exogenous variable with an unknown number of groups \code{m} and \eqn{\pi}{pi} is a vector of group means. 
+#' latentIV  considers \eqn{Z_{t}^{'}}{Z_t} to be a latent, discrete, exogenous variable with an unknown number of groups \code{m} and \eqn{\pi}{pi} is a vector of group means. 
 #' It is assumed that \code{Z} is independent of the error terms \eqn{\epsilon}{eps} and \eqn{\nu}{nu} and that it has at least two groups with different means. 
 #' The structural and random errors are considered normally distributed with mean zero and variance-covariance matrix \eqn{\Sigma}{Sigma}: 
 #' \deqn{\Sigma = \left(
@@ -36,7 +36,7 @@
 #' at least two groups with different means. 
 #' 
 #' The method has been programmed such that the latent variable has two groups. Ebbes et al.(2005) show in a Monte Carlo experiement that
-#' even if the true number of the categories of the instrument is larger than two, LIV estimates are approximately consistent. Besides, overfitting in terms
+#' even if the true number of the categories of the instrument is larger than two, latentIV estimates are approximately consistent. Besides, overfitting in terms
 #' of the number of groups/categories reduces the degrees of freedom and leads to efficiency loss. When provided by the user, the initial parameter values
 #' for the two group means have to be different, otherwise the model is not identified. For a model with additonal explanatory variables a Bayesian approach is needed, since
 #' in a frequentist approach identification issues appear. The optimization algorithm used is BFGS.
@@ -53,7 +53,7 @@
 #'\item{convcode}{an integer code, the same as the output returned by \code{optimx}. 0 indicates successful completion. A possible error code is 1 which indicates that the iteration
 #'limit maxit had been reached.}
 #'\item{hessian}{a symmetric matrix giving an estimate of the Hessian at the solution found.}
-#'@keywords endogenousdata
+#'@keywords endogenous
 #'@keywords latent
 #'@keywords instruments
 #'@author The implementation of the model formula by Raluca Gui based on the paper of Ebbes et al. (2005).
@@ -63,23 +63,24 @@
 #' \bold{3}:365--392.
 #' @examples
 #' # load data
-#' data(dataLIV)
-#' y <- dataLIV$y
-#' P <- dataLIV$P
+#' data(dataLatentIV)
+#' y <- dataLatentIV[,1]
+#' P <- dataLatentIV[,2]
 #' # function call without any initial parameter values 
-#' l  <- liv(y ~ P)
+#' l  <- latentIV(y ~ P)
 #' summary(l)
 #' # function call with initial parameter values given by the user
-#' l1 <- liv(y ~ P, c(2.9,-0.85,0,0.1,1,1,1,0.5))
+#' l1 <- latentIV(y ~ P, c(2.9,-0.85,0,0.1,1,1,1,0.5))
 #' summary(l1)
 # make availble to the package users
 #'@export
-liv <- function(formula, param=NULL, data=NULL){
+#'@import methods
+latentIV <- function(formula, param=NULL, data=NULL){
 
- if( ncol(stats::get_all_vars(formula)) != 2 )
+ if( ncol(get_all_vars(formula)) != 2 )
     stop("A wrong number of parameters were passed in the formula. No exogenous variables are admitted.")
 
-  mf <- stats::model.frame(formula = formula, data = data)
+  mf <- model.frame(formula = formula, data = data)
 
   
   # if user parameters are not defined, provide initial param. values
@@ -93,10 +94,10 @@ liv <- function(formula, param=NULL, data=NULL){
   
   if (is.null(param)) {
 
-    param1 <- stats::coefficients(stats::lm(mf[,1]~mf[,2]))[1]
-    param2 <- stats::coefficients(stats::lm(mf[,1]~mf[,2]))[2]
+    param1 <- coefficients(lm(mf[,1]~mf[,2]))[1]
+    param2 <- coefficients(lm(mf[,1]~mf[,2]))[2]
     param3 <- mean(mf[,2])
-    param4 <- mean(mf[,2]) + stats::sd(mf[,2])
+    param4 <- mean(mf[,2]) + sd(mf[,2])
     param5 <- param6 <- param7 <- 1
     param8 <- 0.5
     param <- as.double(c(param1,param2,param3,param4,param5,param6,param7,param8))
@@ -106,10 +107,11 @@ liv <- function(formula, param=NULL, data=NULL){
                        method="BFGS",hessian=T,
                        control=list(trace=0))
   
-  obj <- methods::new("liv")
+  obj <- methods::new("livREndo")
+  
   obj@formula <- formula
   
-  obj@coefficients <- c(b$p1, b$p2)      # coefficients
+  obj@coefficients <- as.numeric(c(b$p1, b$p2))      # coefficients
   
   obj@groupMeans <-  c(b$p3, b$p4)     # means of the 2 groups of the latent IV
   
@@ -136,6 +138,7 @@ liv <- function(formula, param=NULL, data=NULL){
   if (obj@seMeans[1] =="NaN") warning("Group means' standard errors unable to be computed. Check initial parameter values")
   
   obj@seProbG1 <- std_par[8]
-  
+ 
+  obj@dataset <- cbind(y,P)
   return(obj)
 }

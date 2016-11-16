@@ -4,8 +4,8 @@
 \alias{internalIV}
 \title{Constructs Internal Instrumental Variables From Data}
 \usage{
-internalIV(y, X, P, G = c("x2", "x3", "lnx", "1/x"), IIV = c("g", "gp",
-  "gy", "yp", "p2", "y2"), data = NULL)
+internalIV(y, X, P, G = NULL, IIV = c("g", "gp", "gy", "yp", "p2", "y2"),
+  data = NULL)
 }
 \arguments{
 \item{y}{the vector or matrix containing the dependent variable.}
@@ -18,25 +18,25 @@ internalIV(y, X, P, G = c("x2", "x3", "lnx", "1/x"), IIV = c("g", "gp",
 The last two forms are conditional on the values of the exogenous variables: greater than 0 or different from 0 respectively.}
 
 \item{IIV}{the internal instrumental variable to be constructed. It can take six values, \code{"g","gp","gy","yp","p2"or"y2"}. See the "Details" section 
-of \code{\link{hmlewbel}} for a description of the internal instruments.}
+of \code{\link{higherMomentsIV}} for a description of the internal instruments.}
 
 \item{data}{optional data frame or list containing the variables in the model.}
 }
 \value{
-Returns a vector/matrix constructed from the data whcih can be used as instrumental variable either in \code{\link{hmlewbel}} or in any other function/algorithm making use
+Returns a vector/matrix constructed from the data whcih can be used as instrumental variable either in \code{\link{higherMomentsIV}} or in any other function/algorithm making use
 of instruments.
 }
 \description{
-The function can be used to construct additional instruments to be supplied to \code{\link{hmlewbel}} as additional instruments
+The function can be used to construct additional instruments to be supplied to \code{\link{higherMomentsIV}} as additional instruments
 in the "EIV" argument.
 }
 \examples{
 # load data
-data(dataHMLewbel)
-y <- dataHMLewbel$y
-X <- cbind(dataHMLewbel$X1,dataHMLewbel$X2)
+data(dataHigherMoments)
+y <- dataHigherMoments[,1]
+X <- cbind(dataHigherMoments[,2],dataHigherMoments[,3])
 colnames(X) <- c("X1","X2")
-P <- dataHMLewbel$P
+P <- dataHigherMoments[,4]
 # build an instrument gp = (G - mean(G))(P - mean(P))  using the internalIV() function 
 # with G = "x3" meaning G(X) = X^3
 eiv <- internalIV(y,X,P, G ="x3", IIV = "gp")
@@ -46,7 +46,7 @@ Lewbel, A. (1997). "Lewbel, A. (1997). 'Constructing Instruments for Regressions
 with An Application to Patents and R&D'. Econometrica, 65(5), 1201-1213."
 }
 \seealso{
-\code{\link{hmlewbel}}
+\code{\link{higherMomentsIV}}
 }
 \keyword{endogeneity}
 \keyword{instruments}

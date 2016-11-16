@@ -1,5 +1,5 @@
-\name{dataHMLewbel}
-\alias{dataHMLewbel}
+\name{dataHigherMoments}
+\alias{dataHigherMoments}
 \docType{data}
 \title{
 Simulated Dataset
@@ -9,7 +9,7 @@ A dataset enclosing a dependent variable, \code{y}, two exogenous regressors, \c
 \deqn{y = b0 + b1 * X1 + b2 * X2 + a1 * P + epsilon}
 True parameter values are \code{b0 = 2, b1 = 1.5, b2 = -3, a1 = -1}. 
 }
-\usage{data("dataHMLewbel")}
+\usage{data("dataHigherMoments")}
 \format{
   A data frame with 2500 observations on the following 4 variables.
   \describe{
@@ -22,5 +22,5 @@ True parameter values are \code{b0 = 2, b1 = 1.5, b2 = -3, a1 = -1}.
 
 \keyword{datasets}
 \seealso{
-\code{\link{hmlewbel}}
+\code{\link{higherMomentsIV}}
 }
