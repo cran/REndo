@@ -16,4 +16,3 @@
 prints the coefficients of the estimated model
 }
 \keyword{internal}
-

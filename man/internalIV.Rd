@@ -51,4 +51,3 @@ with An Application to Patents and R&D'. Econometrica, 65(5), 1201-1213."
 \keyword{endogeneity}
 \keyword{instruments}
 \keyword{lewbel}
-

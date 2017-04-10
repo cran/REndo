@@ -20,9 +20,9 @@ defines the slots of class mixedREndo.
 
 \item{\code{weightMat}}{- the weight matrix used for estimation.}
 }}
+
 \examples{
 getSlots("mixedREndo")
 
 }
 \keyword{internal}
-

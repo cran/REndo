@@ -16,4 +16,3 @@
 returns the summary of the estimated model
 }
 \keyword{internal}
-

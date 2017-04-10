@@ -82,23 +82,19 @@ colnames(X) <- c("X1","X2")
 P <- dataHigherMoments[,4]
 
 # call higherMomentsIV with internal instrument yp = (Y - mean(Y))(P - mean(P))
-higherMomentsIV(y,X,P, G = "x2", IIV = "yp")  
+h <- higherMomentsIV(y,X,P, G = "x2", IIV = "yp")  
 
 # build an additional instrument p2 = (P - mean(P))^2  using the internalIV() function 
 eiv <- internalIV(y,X,P, G="x2", IIV = "p2")
 
 # use the additional variable as external instrument in higherMomentsIV()
-h <- higherMomentsIV(y,X,P,G = "x2",IIV = "yp", EIV=eiv) 
-coef(h)
-summary(h)
+h1 <- higherMomentsIV(y,X,P,G = "x2",IIV = "yp", EIV=eiv) 
+summary(h1)
 
 # get the robust standard errors using robust.se() function from package ivpack
 # library(ivpack)
-# sder <- robust.se(h)
+# sder <- robust.se(h1)
 
-}
-\author{
-The implementation of the model formula by Raluca Gui based on the paper of Lewbel (1997).
 }
 \references{
 Lewbel, A. (1997). Constructing Instruments for Regressions with Measurement Error when No Additional Data Are Available,
@@ -107,7 +103,9 @@ with An Application to Patents and R&D. \emph{Econometrica}, \bold{65(5)}, 1201-
 \seealso{
 \code{\link{internalIV}}, \code{\link[AER]{ivreg}}, \code{\link{latentIV}}
 }
+\author{
+The implementation of the model formula by Raluca Gui based on the paper of Lewbel (1997).
+}
 \keyword{endogenous}
 \keyword{instruments}
 \keyword{latent}
-

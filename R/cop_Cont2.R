@@ -31,6 +31,6 @@ if (intercept==FALSE) {
 f.lm <- stats::lm(y ~.-1, dataCopula)
 } else {f.lm <- stats::lm(y ~., dataCopula)}
 f.lm$call <- match.call()
-res <- list(f=f.lm, reg=datCop)
+res <- list(f=f.lm, reg=datCop, resid = f.lm$residuals, fitted.values = f.lm$fitted.values)
 return(res)
 }

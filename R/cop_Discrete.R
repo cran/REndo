@@ -6,12 +6,12 @@
 
 #
 # Arguments
-#'@param  y  the vector containing the dependent variable. 
-#'@param  X  the matrix containing the regressors, with the endogenous variables occupying the last columns.
-#'@param  P  the matrix containing the discrete endogeneous regressors.
+#'@param  y  vector containing the dependent variable. 
+#'@param  X  matrix containing the regressors, with the endogenous variables occupying the last columns.
+#'@param  P  matrix containing the discrete endogeneous regressors.
 #'@param  intercept  the intercept of the model. It should be specified whether the model should be estimated with or without intercept. 
 #'If no intercept is desired, intercept should be given the value "FALSE", otherwise the value "TRUE".
-#'@param data  the matrix or data frame containing the dataset used.
+#'@param data  optional matrix or data frame containing the dataset used.
 
 #
 # Return Value
@@ -112,6 +112,6 @@ for (i in 1:nc)
   CI[i,] <- apply(conf.int[[i]],2,mean)
 
 
-res <- list(coefficients= bhat, CI=CI, reg=dataCopula)
+res <- list(coefficients= bhat, CI=CI, reg=dataCopula, resid = meth.2$residuals, fitted.values=meth.2$fitted.values)
 return(res)
 }

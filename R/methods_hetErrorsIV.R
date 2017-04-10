@@ -1,31 +1,31 @@
-#' @title  methods for the heterogenIV function
+#' @title  methods for the hetErrorsIV function
 #' @description prints the coefficients for the model's parameters 
-#' @param object an object of class "heterogenREndo"
+#' @param object an object of class "hetREndo"
 #' @param ... extra named arguments 
 #' @export
 #' @keywords internal
-setMethod( f = "coef", signature= c(object="heterogenREndo"), definition=function(object, ...)
+setMethod( f = "coef", signature= c(object="hetREndo"), definition=function(object, ...)
   {
     z <- object   
-    cat("Formula:\n")
-    print(z@formula)
-    cat("\nCoefficients and Standard Errors:\n")
+    cat("Call:\n")
+    print(z@call)
+    cat("\nCoefficients\n")
     printCoefmat(z@coefficients, P.values=T, has.Pvalue=T)
     }
 )
 
-#' @title  methods for the heterogenIV function
+#' @title  methods for the hetErrorsIV function
 #' @description prints summary for the model's parameters 
-#' @param object an object of class "heterogenREndo"
+#' @param object an object of class "hetREndo"
 #' @param ... extra named arguments 
 #' @export
 #' @keywords internal
-setMethod( f = "summary", signature= c(object="heterogenREndo"), definition=function(object, ...)
+setMethod( f = "summary", signature= c(object="hetREndo"), definition=function(object, ...)
 {
   z <- object   
-  cat("Formula:\n")
-  print(z@formula)
-  cat("\nCoefficients and Standard Errors:\n")
+  cat("Call:\n")
+  print(z@call)
+  cat("\nCoefficients:\n")
   printCoefmat(z@coefficients, P.values=T, has.Pvalue=T)
   cat("\nOveridentification Test:\n")
   print(z@jtest)

@@ -27,11 +27,19 @@ With one discrete or more than one continuous endogenous regressors, the second 
 intercept. If no intercept is desired or the regressors matrix \code{X} contains already
 a column of ones, intercept should be given the value "no".}
 
-\item{data}{optional data frame or matrix containing the variables of the model.}
+\item{data}{data frame or matrix containing the variables of the model.}
 }
 \value{
-Depending on the method and the type of the variables, it returns the optimal values of the parameters and their standard errors in the case of the second method. 
-With one endogenous variable, if the maximum likelihood approach is chosen, the standard errors can be computed by bootsptrapping using the \code{\link{boots}} function from the same package.
+Depending on the method and the type of the variables, it returns the optimal values of the parameters and their standard errors. When the method one is used, the standard 
+errors returned are obtained bootstrapping over 10 samples. If more bootstraping samples are desired, the standard errors can be obtained using the \code{\link{boots}} function from the same package.
+The following are being returned and can be saved: 
+\item{coefficients}{the estimated coefficients.}
+\item{standard errors}{the corresponding estimated coefficients standard errors.}
+\item{fitted.values}{the fitted values.}
+\item{residuals}{the estimated residuals.} 
+\item{logLik}{the estimated log likelihood value in the case of method 1.}
+\item{AIC}{Akaike Information Criterion in the case of method 1.}
+\item{BIC}{Bayesian Information Criterion in the case of method 1.}
 }
 \description{
 Fits linear models with continuous or discrete endogeneous regressors using Gaussian copulas, method presented in Park and Gupta (2012).
@@ -44,21 +52,21 @@ can be specified by using method two - "method="2"".
 }
 \examples{
 #load dataset dataCopC1, where P is endogenous, continuous and not normally distributed
+
 data(dataCopC1)
 y <- dataCopC1[,1]
 X <- dataCopC1[,2:5]
 P <- dataCopC1[,5]
+\dontrun{
 c1 <- copulaCorrection(y, X, P, type = "continuous", method = "1", intercept=FALSE)
 summary(c1)
-# to obtain the standard errors use the boots() function
-# se.c1 <- boots(10, y, X, P, param = c(1,1,-2,-0.5,0.2,1), intercept=FALSE)
+}
 
 # an alternative model can be obtained using "method ="2"".
 c12 <- copulaCorrection(y, X, P, type = "continuous", method = "2", intercept=FALSE)
 summary(c12)
 
-# load dataset with 2 continuous, non-normally distributed endogeneous regressors.
-# with 2 endogeneous regressors no initial parameters needed, the default is the augmented OLS.
+# with 2 endogeneous regressors no initial parameters are needed, the default is the augmented OLS.
 data(dataCopC2)
 y <- dataCopC2[,1]
 X <- dataCopC2[,2:6]
@@ -72,16 +80,15 @@ data(dataCopDis)
 y <- dataCopDis[,1]
 X <- dataCopDis[,2:5]
 P <- dataCopDis[,5]
-c3 <- copulaCorrection(y, X, P, type = "discrete", intercept=FALSE)
+c3 <- copulaCorrection(y, X, P, type = "discrete", intercept=FALSE, data = dataCopDis)
 summary(c3)
-}
-\author{
-The implementation of the model by Raluca Gui based on the paper of Park and Gupta (2012).
 }
 \references{
 Park, S. and Gupta, S., (2012), 'Handling Endogeneous Regressors by Joint Estimation Using Copulas', Marketing Science, 31(4), 567-86.
 }
 \seealso{
-\code{\link{higherMomentsIV}}, \code{\link{latentIV}}
+\code{\link{higherMomentsIV}}
 }
-
+\author{
+The implementation of the model by Raluca Gui based on the paper of Park and Gupta (2012).
+}

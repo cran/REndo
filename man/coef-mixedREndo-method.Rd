@@ -3,6 +3,7 @@
 \docType{methods}
 \name{coef,mixedREndo-method}
 \alias{coef,mixedREndo-method}
+\alias{coef-methods}
 \title{methods for the multilevelIV function}
 \usage{
 \S4method{coef}{mixedREndo}(object, ...)
@@ -16,4 +17,3 @@
 prints the coefficients for the model's parameters
 }
 \keyword{internal}
-

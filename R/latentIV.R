@@ -9,7 +9,7 @@
 # Arguments
 #'@param    formula  an object of type 'formula': a symbolic description of the model to be fitted. Example \code{var1 ~ var2}, where \code{var1} is a vector
 #' containing the dependent variable, while \code{var2} is a vector containing the endogenous variable. An intercept is included by default.
-#'@param    data  optional data frame or list containing the variables of the model.
+#'@param    data   data frame or list containing the variables of the model.
 #'@param    param  a vector of initial values for the parameters of the model to be supplied to the optimization algorithm. In any model there are eight parameters.
 #'The first parameter is the intercept, then the coefficient of the endogenous variable followed by the means of the two groups of the latent IV (they need to be different, otherwise model is not identified),
 #'then the next three parameters are for the variance-covariance matrix. The last parameter is the probability of being in group 1. When not provided, 
@@ -43,13 +43,16 @@
 #'
 #Return Value
 #'@return    Returns the optimal values of the parameters as computed by maximum likelihood using BFGS algorithm. 
-#'\item{coefficients}{returns the value of the parameters for the intercept and the endogenous regressor as computed with maximum likelihood.}
-#'\item{means}{returns the value of the parameters for the means of the two categories/groups of the latent instrumental variable.}
-#'\item{sigma}{returns the variance-covariance matrix sigma, where on the main diagonal are the variances of the structural error and that of
+#'\item{coefficients}{ the value of the parameters for the intercept and the endogenous regressor as computed with maximum likelihood.}
+#'\item{fitted.values}{the fitted values.}
+#'\item{means}{the value of the parameters for the means of the two categories/groups of the latent instrumental variable.}
+#'\item{sigma}{the variance-covariance matrix sigma, where on the main diagonal are the variances of the structural error and that of
 #'the endogenous regressor and the off-diagonal terms are equal to the covariance between the errors.}
-#'\item{probG1}{returns the probability of being in group one. Since the model assumes that the latent instrumental variable has two groups,
+#'\item{probG1}{ the probability of being in group one. Since the model assumes that the latent instrumental variable has two groups,
 #'\code{1-probG1} gives the probability of group 2.}
 #'\item{value}{the value of the log-likelihood function corresponding to the optimal parameters.}
+#'\item{AIC}{Akaike Information Criterion.}
+#'\item{BIC}{Bayesian Information Criterion.}
 #'\item{convcode}{an integer code, the same as the output returned by \code{optimx}. 0 indicates successful completion. A possible error code is 1 which indicates that the iteration
 #'limit maxit had been reached.}
 #'\item{hessian}{a symmetric matrix giving an estimate of the Hessian at the solution found.}
@@ -64,23 +67,21 @@
 #' @examples
 #' # load data
 #' data(dataLatentIV)
-#' y <- dataLatentIV[,1]
-#' P <- dataLatentIV[,2]
 #' # function call without any initial parameter values 
-#' l  <- latentIV(y ~ P)
+#' l  <- latentIV(y ~ P, data = dataLatentIV)
 #' summary(l)
 #' # function call with initial parameter values given by the user
-#' l1 <- latentIV(y ~ P, c(2.9,-0.85,0,0.1,1,1,1,0.5))
+#' l1 <- latentIV(y ~ P, c(2.9,-0.85,0,0.1,1,1,1,0.5), data = dataLatentIV)
 #' summary(l1)
 # make availble to the package users
 #'@export
-#'@import methods
-latentIV <- function(formula, param=NULL, data=NULL){
+#@import methods
+latentIV <- function(formula, param=NULL, data){
 
- if( ncol(get_all_vars(formula)) != 2 )
+ if( ncol(get_all_vars(formula, data)) != 2 )
     stop("A wrong number of parameters were passed in the formula. No exogenous variables are admitted.")
 
-  mf <- model.frame(formula = formula, data = data)
+  mf <- model.frame(formula, data)
 
   
   # if user parameters are not defined, provide initial param. values
@@ -90,7 +91,8 @@ latentIV <- function(formula, param=NULL, data=NULL){
   # probG1 = 0.5
   
   y <- mf[,1]
-  P <- mf[,ncol(mf)]
+  #P <- mf[,ncol(mf)]
+  P <- model.matrix(formula, data)[,2]
   
   if (is.null(param)) {
 
@@ -103,27 +105,34 @@ latentIV <- function(formula, param=NULL, data=NULL){
     param <- as.double(c(param1,param2,param3,param4,param5,param6,param7,param8))
   }
   
-  b <- optimx::optimx( par=param,fn=logL, y=mf[,1],P=mf[,2],
+  b <- optimx::optimx( par=param,fn=logL, y=y,P=P,
                        method="BFGS",hessian=T,
                        control=list(trace=0))
   
   obj <- methods::new("livREndo")
   
+  obj@call <- match.call()
+  
   obj@formula <- formula
   
-  obj@coefficients <- as.numeric(c(b$p1, b$p2))      # coefficients
+  obj@coefficients <- as.numeric(c(round(b$p1,5), round(b$p2,5)))      # coefficients
   
-  obj@groupMeans <-  c(b$p3, b$p4)     # means of the 2 groups of the latent IV
+  obj@fitted.values <- as.matrix(as.numeric(round(b$p1,5))*rep(1,length(data[,1])) + as.numeric(round(b$p2,5)) * P) 
+  obj@residuals <- as.matrix(y-obj@fitted.values)
+  
+  obj@groupMeans <-  c(round(b$p3,5), round(b$p4,5))     # means of the 2 groups of the latent IV
   
   # variance-covariance matrix of errors
   obj@sigma <- matrix(c(b$p5^2,b$p5*b$p6,b$p5*b$p6,b$p6^2+b$p7^2),2,2)
   
-  obj@probG1 <- b$p8     # probability of group 1
+  obj@probG1 <- round(b$p8,3)     # probability of group 1
   # check for the probability to be less than 1 - if not, give warning, change initial parameter values
   if (obj@probG1 > 1) warning("Probability of Group 1 greater than 0. Check initial parameter values")
   
-  obj@initValues <- param 
-  obj@value <- b$value          # the value of the likelihood function corresponding to param
+  obj@initValues <- round(param,3) 
+  obj@value <- (-1)*b$value          # the value of the likelihood function corresponding to param
+  obj@AIC <- (-2)*(-b$value) + 2*length(param)  # Akaike Information Criterion
+  obj@BIC <- (-2)*(-b$value) + length(data[,1])*length(param)
   obj@convCode <- as.integer(b$convcode)    # message whether if converged
   
   hess <- attr(b,"details")[,"nhatend"]         # hessian matrix
@@ -131,7 +140,7 @@ latentIV <- function(formula, param=NULL, data=NULL){
   obj@hessian <- hess[[1]]
   
   
-  obj@seCoefficients <- std_par[1:2]
+  obj@seCoefficients <- round(std_par[1:2],3)
   if (obj@seCoefficients[1] =="NaN") warning("Coefficient's standard errors unable to be computed. Check initial parameter values")
   
   obj@seMeans <- std_par[3:4]

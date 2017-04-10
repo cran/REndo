@@ -11,7 +11,7 @@
 #'@param    intercept  It should be specified whether the model should be estimated with or without intercept. 
 #'If no intercept is desired or the regressors matrix \code{X} contains already
 #'a column of ones, intercept should be given the value "FALSE", otherwise the value "TRUE".
-#'@param data optional data frame or matrix containing the variables of the model.
+#'@param data  optional data frame or matrix containing the variables of the model.
  
 #
 # Return Value
@@ -20,7 +20,7 @@
 #'internal
 #'copula
 #'instrumental variables
-copulaCont1 <- function(y,X,P, param = NULL, intercept = NULL, data=NULL){
+copulaCont1 <- function(y,X,P, param = NULL, intercept = NULL, data = NULL){
 
   
     if (intercept==TRUE) {
@@ -49,8 +49,7 @@ copulaCont1 <- function(y,X,P, param = NULL, intercept = NULL, data=NULL){
     }
    
    b <- optimx::optimx(par=param,fn=logLL,y=y, X=X, P=P, method="BFGS", control=list(trace=0)) 
-   #serrors <- boots(10, y, X, P, param, intercept, data)
-   results <-list(k=k,k1=k1,coef_cop=b, reg=as.matrix(X), param= param) 
+   results <- list(k=k,k1=k1,coef_cop=b, reg=as.matrix(X), param = param) 
  
     return(results)
   

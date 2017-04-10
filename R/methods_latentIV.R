@@ -9,7 +9,7 @@ setMethod(f = "coef", signature= c(object="livREndo"), definition=function(objec
                names.coef <- c("Intercept", object@formula[[3]])
                est <- t(object@coefficients)   # estimates value
                colnames(est) <- names.coef
-               print(est)
+               est
 }
 )
 
@@ -32,13 +32,17 @@ setMethod(f = "summary", signature= c(object="livREndo"), definition=function(ob
             colnames(coef.table) <- c("Estimate","Std. Error", "t value","Pr(>|t|)")
             rownames(coef.table) <- c("Intercept",names.coef)
             
+            cat("\nCall:\n")
+            print(z@call)
             cat("\nCoefficients:\n")
             printCoefmat(coef.table) # print the coefficient and std errors
             
             cat("\nInitial Parameter Values:\n", z@initValues)  # print initial param values
             cat("\n")
-            cat("\nThe Value of the log likelihood function:\n", z@value)  # print logLik values
+            cat("\nThe value of the log likelihood function:\n", z@value)  # print logLik values
             cat("\n")
-            cat("\nConvergence Code:\n", z@convCode)  # print comvergence code
+            cat("\nAIC:", z@AIC, ",", "BIC:", z@BIC)  # AIC and BIC
+            cat("\n")
+            cat("\nConvergence Code:\n", z@convCode)  # print convergence code
       }
 )

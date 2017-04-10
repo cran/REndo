@@ -37,4 +37,3 @@ of the \code{copulaCorrection} function is used for estimation.
 \seealso{
 \code{\link{copulaCorrection}}
 }
-

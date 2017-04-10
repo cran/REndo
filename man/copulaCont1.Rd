@@ -31,4 +31,3 @@ Estimates a linear model with one endogenous variable using Gaussian copula. The
 \keyword{instrumental}
 \keyword{internal}
 \keyword{variables}
-

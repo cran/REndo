@@ -27,4 +27,3 @@ It fits linear models with several endogeneous regressors using Gaussian Copula 
 \keyword{instrumental}
 \keyword{internal}
 \keyword{variables}
-

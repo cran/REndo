@@ -10,17 +10,23 @@ This class is used to store and further analyze the results of the latentIV func
 \section{Slots}{
 
 \describe{
-\item{\code{formula}}{- the model formula.}
+\item{\code{call}}{- function call.}
 
-\item{\code{coefficients}}{- the estimated coefficients.}
+\item{\code{formula}}{- model formula.}
+
+\item{\code{coefficients}}{- estimated coefficients.}
 
 \item{\code{seCoefficients}}{- standard error of the estimates.}
 
-\item{\code{groupMeans}}{- the estimates means of the assumed latent groups.}
+\item{\code{fitted.values}}{- fitted values.}
+
+\item{\code{residuals}}{- estimation residuals.}
+
+\item{\code{groupMeans}}{- estimates means of the assumed latent groups.}
 
 \item{\code{seMeans}}{- standard errors of the estimates of the groups' means.}
 
-\item{\code{sigma}}{- the variance -covariance matrix.}
+\item{\code{sigma}}{-  variance -covariance matrix.}
 
 \item{\code{probG1}}{- probability of group 1.}
 
@@ -30,15 +36,19 @@ This class is used to store and further analyze the results of the latentIV func
 
 \item{\code{value}}{- the value of the maximum likelihood function.}
 
+\item{\code{AIC}}{- Akaike Information Criterion.}
+
+\item{\code{BIC}}{- Bayesian Information Criterion.}
+
 \item{\code{convCode}}{- convergence code. If equalt to zero the model has converged.}
 
 \item{\code{hessian}}{- the hessian matrix.}
 
 \item{\code{dataset}}{- a matrix containing the dependent variable and the endogenous regressor.}
 }}
+
 \examples{
 getSlots("livREndo")
 
 }
 \keyword{internal}
-

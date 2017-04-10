@@ -11,6 +11,7 @@
 #' @name mixedREndo-class
 #' @exportClass mixedREndo
 #' @rdname mixedREndo
+#' @export
 #' @keywords internal
 #' @examples
 #' getSlots("mixedREndo")

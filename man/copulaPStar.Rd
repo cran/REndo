@@ -20,4 +20,3 @@ Computes the empirical distribution function of a variable and the inverse-norma
 }
 \keyword{copula}
 \keyword{endogeneity}
-

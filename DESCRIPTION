@@ -2,23 +2,40 @@ Package: REndo
 Type: Package
 Title: Fitting Linear Models with Endogenous Regressors using Latent
         Instrumental Variables
-Version: 1.1
-Date: 2016-11-16
+Version: 1.2
+Date: 2017-03-28
 Author: Raluca Gui,
-        Markus Meierer,
-        Rene Algesheimer
+    Markus Meierer,
+    Rene Algesheimer
 Maintainer: Raluca Gui <raluca.gui@business.uzh.ch>
 Description: Fits linear models with endogenous regressor using latent
-    instrumental variable approaches. The methods included in the package are Lewbel's (1997)
-    higher moments approach as well as Lewbel's (2012) heteroskedasticity approach, Park and Gupta's (2012) joint estimation method that uses Gaussian
-    copula and Kim and Frees's (2007) multilevel generalized method of moment approach that deals with endogeneity in a multilevel setting. 
-    These are statistical techniques to address the endogeneity problem where no external instrumental variables are needed.
-Imports: optimx, mvtnorm, AER,e1071, stats, corpcor, lme4, gmm, lmtest,
-        plyr, sandwich, Matrix
+    instrumental variable approaches. The methods included in the package
+    are Lewbel's (1997) <doi:10.2307/2171884> higher moments approach as well as Lewbel's (2012) <doi:10.1080/07350015.2012.643126>
+    heteroskedasticity approach, Park and Gupta's (2012) <doi:10.1287/mksc.1120.0718>joint estimation method
+    that uses Gaussian copula and Kim and Frees's (2007) <doi:10.1007/s11336-007-9008-1> multilevel generalized
+    method of moment approach that deals with endogeneity in a multilevel setting.
+    These are statistical techniques to address the endogeneity problem where no
+    external instrumental variables are needed.
+    This version: 
+       - solves an error occurring when using the multilevelIV() function with two levels, random intercept. 
+       - returns the AIC and BIC for copulaCorrection() (method 1) and latentIV() methods.
+       - residuals and fitted values can be saved by users for latentIV() and copulaCorrection() methods.
+       - improves the summary methods for copulaCorrection() and multilevelIV() functions.
+Imports: optimx, mvtnorm, AER, e1071, stats, corpcor, lme4, gmm,
+        lmtest, plyr, sandwich, Matrix
 Depends: methods
 License: GPL-3
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
+Collate: 'checkAssumptions.R' 'cop_Cont1.R' 'cop_Cont2.R'
+        'cop_Discrete.R' 'cop_bootsSE.R' 'cop_logLik.R' 'cop_pStar.R'
+        'copulaCorrection.R' 'copulaCorrection_class.R'
+        'f_hetErrorsIV.R' 'f_multilevelGMM.R' 'hetErrorsIV.R'
+        'hetErrorsIV_class.R' 'higherMomentsIV.R' 'internalIV.R'
+        'latentIV.R' 'latentIV_class.R' 'latentIV_loglik.R'
+        'methods_copulaCorrection.R' 'methods_hetErrorsIV.R'
+        'methods_latentIV.R' 'methods_multilevelIV.R' 'multilevelIV.R'
+        'mixedGMM.R' 'multilevelIV_class.R' 'tScores.R'
 NeedsCompilation: no
-Packaged: 2016-11-16 05:54:08 UTC; raluca
+Packaged: 2017-04-10 14:10:18 UTC; raluca
 Repository: CRAN
-Date/Publication: 2016-11-16 10:49:31
+Date/Publication: 2017-04-10 14:33:46 UTC

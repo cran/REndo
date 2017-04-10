@@ -1,8 +1,8 @@
 # Raluca Gui - 11.04.2016
 # adapt from Kim and Frees 2007
-# multilevelIV for 2 and 3 levels
+# mixedGMM for 2 and 3 levels
 #'@title Multilevel GMM Estimation
-#'@aliases multilevelIV
+#'@aliases mixedGMM
 # Description
 #'@description  Estimates multilevel models (max. 3 levels) employing the GMM approach presented in Kim and Frees (2007). One of the important features is that, using the hierarchical 
 #'structure of the data, no external instrumental variables are needed, unlike traditional instrumental variable techniques.
@@ -30,20 +30,19 @@
 #'@keywords  instruments
 #'@author The implementation of the model formula by Raluca Gui based on the paper of Kim and Frees (2007).
 #'@references   Kim, Jee-Seon and Frees, Edward W. (2007). 'Multilevel Modeling with Correlated Effects'. \emph{Psychometrika},72(4), 505-533.
-#'@seealso \code{\link{internalIV}}, \code{\link[AER]{ivreg}}, \code{\link{latentIV}},\code{\link{copulaCorrection}}
 #'@examples
 #'\dontrun{
 #'data(tScores)
-#'endoVars <- tScores[,RETAINED:S_FREELU, with=FALSE]
-#'formula1 <- 
+#'endoVars <- tScores[,5:7] 
+#'formula <- 
 #'TLI ~ GRADE_3 + RETAINED + SWITCHSC + S_FREELU + FEMALE + BLACK + HISPANIC + 
 #'OTHER + C_COHORT + T_EXPERI + CLASS_SI + P_MINORI + 
 #'(1+GRADE_3 | CID) + (1 | SID)
-#'model1<- multilevelIV(formula1, endoVars, data=tScores)
+#'model1<- mixedGMM(formula, endoVars, data=tScores)
 #'coef(model1)
 #'}
 #'@export
-multilevelIV <- function(formula, endoVar, data = NULL) {
+mixedGMM <- function(formula, endoVar, data = NULL) {
 
 print("Attention! The endogeneous regressor names in endoVar have to match the names as they appear in the data")
   
@@ -64,107 +63,109 @@ nTot <- Interim$nTot
 endo.env <- Interim$envir
 
 #  GMM estimation 
-printGMM <- function(y,X,HIV,id,Wmat, Vmat, nLevels, nTot, obsid, envir){
-  
-  estimGMM <- GmmEstim(y,X,HIV,id,Wmat, Vmat, nLevels, nTot, obsid, envir)
-  b <- estimGMM$bIV
-  se <- round(estimGMM$MSdError,3)
-  z <- round(b/se,3)
-  pval <- round(2*stats::pnorm(-abs(z)),3)
-  printRes <- list(b=b,se=se, z=z, pval=pval)
-  return(printRes)
-}
 
 if (Levels==3) {
 
-  resFEc <- printGMM(y,X,HIVc1,id=1,Wmat=W, Vmat=V, nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
-  bFEc <- resFEc$b
-  sebFEc <- resFEc$se
-  zFEc <- resFEc$z
-  pvalFEc <- resFEc$pval
-  
-  resGMMc <- printGMM(y,X,HIVc2,id=1,Wmat=W, Vmat=V, nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
-  bGMMc <- resGMMc$b
-  sebGMMc <- resGMMc$se
-  zGMMc <- resGMMc$z
-  pvalGMMc <- resGMMc$pval
-  
-  resFEs <- printGMM(y,X,HIVs1,id=2,Wmat=W, Vmat=V, nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
-  bFEs <- resFEs$b
-  sebFEs <- resFEs$se
-  zFEs <- resFEs$z
-  pvalFEs <- resFEs$pval
+gmmFEc <- GmmEstim(y,X,HIVc1,id=1,Wmat=W, Vmat=V, nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
+bFEc <- gmmFEc$bIV   # FixedEffects estimation at L2
+sebFEc <-  round(gmmFEc$MSdError,3)    #Sd Error
+zFEc <- round(bFEc/sebFEc,3)   # z-score
+pvalFEc <- round(2*stats::pnorm(-abs(zFEc)),3)
 
-  resGMMs <- printGMM(y,X,HIVs2,id=2,Wmat=W, Vmat=V, nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
-  bGMMs <- resGMMs$b
-  sebGMMs <- resGMMs$se
-  zGMMs <- resGMMs$z
-  pvalGMMs <- resGMMs$pval
+gmmGMMc <- GmmEstim(y,X,HIVc2,id=1,Wmat=W, Vmat=V,nLevels= Levels, nTot=nTot, obsid=obsid,envir=endo.env)
+bGMMc <-gmmGMMc$bIV   # GMM estimation at L2
+sebGMMc <- round(gmmGMMc$MSdError,3)
+zGMMc <- round(bGMMc/sebGMMc,3)
+pvalGMMc <- round(2*stats::pnorm(-abs(zGMMc)),3)
 
-  HREE <- W %*% as.matrix(X)
-  resREE <- printGMM(y,X,HREE,id=0,Wmat=W, Vmat=V, nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
-  bREE <- resREE$b
-  sebREE <- resREE$se
-  zREE <- resREE$z
-  pvalREE <- resREE$pval
+gmmFEs <- GmmEstim(y,X,HIVs1,id=2,Wmat=W, Vmat=V,nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
+bFEs <- gmmFEs$bIV   # FE estimation at L3
+sebFEs <- gmmFEs$MSdError
+zFEs <- round(bFEs/sebFEs,3)
+pvalFEs <- round(2*stats::pnorm(-abs(zFEs)),3)
 
+gmmGMMs <-  GmmEstim(y,X,HIVs2,id=2,Wmat=W, Vmat=V,nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
+bGMMs <-gmmGMMs$bIV   # GMM estimation at L3
+sebGMMs <- round(gmmGMMs$MSdError,3)
+zGMMs <- round(bGMMs/sebGMMs,3)
+pvalGMMs <- round(2*stats::pnorm(-abs(zGMMs)),3)
+
+HREE <- W %*% as.matrix(X)
+gmmREE <- GmmEstim(y,X,HREE,id=0,Wmat=W, Vmat=V,nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
+bREE <-gmmREE$bIV   # RandomEff estimation
+sebREE <- gmmREE$MSdError
+zREE <- round(bREE/sebREE,3)
+pvalREE <- round(2*stats::pnorm(-abs(zREE)),3)
 
 } else if (Levels==2){
 
-  resFEc <- printGMM(y,X,HIVs1,id=1,Wmat=W, Vmat=V, nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
-  bFEc <- resFEc$b
-  sebFEc <- resFEc$se
-  zFEc <- resFEc$z
-  pvalFEc <- resFEc$pval
+  gmmFEc <- GmmEstim(y,X,HIVs1,id=1,Wmat=W, Vmat=V,nLevels= Levels, nTot=nTot, obsid=obsid,envir=endo.env)
+  bFEc <- gmmFEc$bIV   # FE at L2
+  sebFEc <-  gmmFEc$MSdError
+  zFEc <- round(bFEc/sebFEc,3)
+  pvalFEc <- round(2*stats::pnorm(-abs(zFEc)),3)
  
-  resGMMc <- printGMM(y,X,HIVs2,id=1,Wmat=W, Vmat=V, nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
-  bGMMc <- resGMMc$b
-  sebGMMc <- resGMMc$se
-  zGMMc <- resGMMc$z
-  pvalGMMc <- resGMMc$pval
-  # 
+  gmmGMMc <- GmmEstim(y,X,HIVs2,id=1,Wmat=W, Vmat=V,nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
+  bGMMc <- gmmGMMc$bIV   # GMM estimation at L2
+  sebGMMc <- round(gmmGMMc$MSdError,3)
+  zGMMc <- round(bGMMc/sebGMMc,3)
+  pvalGMMC <- round(2*stats::pnorm(-abs(zGMMc)),3)
+  
   HREE <- W %*% as.matrix(X)
   
-  resREE <- printGMM(y,X,HREE,id=0,Wmat=W, Vmat=V, nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
-  bREE <- resREE$b
-  sebREE <- resREE$se
-  zREE <- resREE$z
-  pvalREE <- resREE$pval
+  gmmREE <- GmmEstim(y,X,HREE,id=0,Wmat=W, Vmat=V,nLevels= Levels, nTot=nTot, obsid=obsid, envir=endo.env)
+  bREE <- gmmREE$bIV   # RandomEffects estimation
+  sebREE <- round(gmmREE$MSdError,3)
+  zREE <- round(bREE/sebREE,3)    # z-score
+  pvalREE <- round(2*stats::pnorm(-abs(zREE)),3)
 }
 # Print results
 
-print.res <- function(coeff, stderr, z,pval){
-  z[!is.finite(z)] <- NA
-  pval[!is.finite(pval)] <- NA
-  b <- cbind(coeff,stderr,z,pval)
-  colnames(b) <- c("Coefficients","ModelSE","z-score", "Pr|>z|")
-  rownames(b) <- predictors
-  return(b)
-}
-
 if (Levels==3) {
   
-  bFE_Lev2 <- print.res(bFEc,sebFEc, zFEc, pvalFEc)
-  bFE_Lev3 <- print.res(bFEs,sebFEs, zFEs, pvalFEs)
-  bGMM_Lev2 <- print.res(bGMMc,sebGMMc,zGMMc, pvalGMMc)
-  bGMM_Lev3 <- print.res(bGMMs,sebGMMs,zGMMs, pvalGMMs)
-  b_REF <- print.res(bREE,sebREE,zREE, pvalREE)
+  zFEc[!is.finite(zFEc)] <- NA
+  bFE_Lev2 <- cbind(bFEc,sebFEc, zFEc, pvalFEc)
+  colnames(bFE_Lev2) <- c("Coefficients","ModelSE","z-score", "Pr|>z|")
+  rownames(bFE_Lev2) <- predictors
   
+  zFEs[!is.finite(zFEs)] <- NA
+  bFE_Lev3 <- cbind(bFEs,sebFEs, zFEs, pvalFEs)
+  colnames(bFE_Lev3) <- c("Coefficients","ModelSE","z-score", "Pr|>z|")
+  rownames(bFE_Lev3) <- predictors
+  
+  zGMMc[!is.finite(zGMMc)] <- NA
+  bGMM_Lev2 <- cbind(bGMMc,sebGMMc,zGMMc, pvalGMMc)
+  colnames(bGMM_Lev2) <- c("Coefficients","ModelSE","z-score", "Pr|>z|")
+  rownames(bGMM_Lev2) <- predictors
+  
+  zGMMs[!is.finite(zGMMs)] <- NA
+  bGMM_Lev3 <- cbind(bGMMs,sebGMMs,zGMMs, pvalGMMs)
+  colnames(bGMM_Lev3)<- c("Coefficients","ModelSE","z-score", "Pr|>z|")
+  rownames(bGMM_Lev3) <- predictors
+  
+  b_REF <- cbind(bREE,sebREE,zREE, pvalREE)
+  colnames(b_REF) <- c("Coefficients","ModelSE","z-score","Pr|>z|" )
+  rownames(b_REF) <- predictors
+  coefSdErr <- list(bFE_Lev2 = bFE_Lev2, bFE_Lev3 = bFE_Lev3, bGMM_Lev2 = bGMM_Lev2, bGMM_Lev3 = bGMM_Lev3, b_REF = b_REF)
   
   coef <- cbind(bFEc,bFEs,bGMMc, bGMMs, bREE)
   colnames(coef) <- c("FE_L2","FE_L3","GMM_L2","GMM_L3","RandomEffects")
   rownames(coef) <- predictors
-  coefSdErr <- list(bFE_Lev2 = bFE_Lev2, bFE_Lev3 = bFE_Lev3, bGMM_Lev2 = bGMM_Lev2, bGMM_Lev3 = bGMM_Lev3, b_REF = b_REF)
   
   results <- list(coefficients=coef, coefSdErr=coefSdErr,vcovMat = V, weightMat = W, formula = formula, model = data)
 
   } else {
- 
-   bFE_Lev2 <- print.res(bFEc,sebFEc, zFEc, pvalFEc)
-   bGMM_Lev2 <- print.res(bGMMc,sebGMMc,zGMMc, pvalGMMc)
-   b_REF <- print.res(bREE,sebREE,zREE, pvalREE)
- 
-  coefSdErr <- list(bFE_Lev2 = bFE_Lev2, bGMM_Lev2 = bGMM_Lev2, b_REF = b_REF)
+  bFE_Lev2 <- cbind(bFEc,sebFEc,zFEc, pvalFEc)
+  colnames(bFE_Lev2) <- c("Coefficients","ModelSE","z-score", "Pr|>z|")
+  rownames(bFE_Lev2) <- predictors
+  
+  bGMM_Lev2 <- cbind(bGMMc,sebGMMc,zGMMc, pvalGMMc)
+  colnames(bGMM_Lev2) <- c("Coefficients","ModelSE","z-score", "Pr|>z|")
+  rownames(bGMM_Lev2) <- predictors
+  b_REF <- cbind(bREE,sebREE,zREE, pvalREE)
+  colnames(b_REF) <- c("Coefficients","ModelSE","z-score", "Pr|>z|")
+  rownames(b_REF) <- predictors
+  coefSdErr <- list(bFE_Lev2 = bFE_Lev2, bFE_Lev3 = bFE_Lev3, bGMM_Lev2 = bGMM_Lev2, bGMM_Lev3 = bGMM_Lev3, b_REF = b_REF)
   coef <- cbind(bFEc, bGMMc, bREE)
   colnames(coef) <- c("FixedEffects","GMM","RandomEffects")
   rownames(coef) <- predictors

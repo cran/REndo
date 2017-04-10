@@ -11,4 +11,3 @@ The internal instruments are constructed as in Lewbel(1997). See \code{\link{hig
 }
 \keyword{internal}
 \keyword{lewbel}
-

@@ -20,4 +20,3 @@ returns the instrumental variables used in estimating the coefficients, variance
 the backbone function for the multilevelIV function
 }
 \keyword{internal}
-

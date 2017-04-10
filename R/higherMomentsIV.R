@@ -77,19 +77,18 @@
 #'P <- dataHigherMoments[,4]
 #'
 #'# call higherMomentsIV with internal instrument yp = (Y - mean(Y))(P - mean(P))
-#'higherMomentsIV(y,X,P, G = "x2", IIV = "yp")  
+#'h <- higherMomentsIV(y,X,P, G = "x2", IIV = "yp")  
 #'
 #'# build an additional instrument p2 = (P - mean(P))^2  using the internalIV() function 
 #'eiv <- internalIV(y,X,P, G="x2", IIV = "p2")
 #'
 #'# use the additional variable as external instrument in higherMomentsIV()
-#'h <- higherMomentsIV(y,X,P,G = "x2",IIV = "yp", EIV=eiv) 
-#'coef(h)
-#'summary(h)
+#'h1 <- higherMomentsIV(y,X,P,G = "x2",IIV = "yp", EIV=eiv) 
+#'summary(h1)
 #'
 #'# get the robust standard errors using robust.se() function from package ivpack
 #'# library(ivpack)
-#'# sder <- robust.se(h)
+#'# sder <- robust.se(h1)
 #'
 # make availble to the package users
 #'@export

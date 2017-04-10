@@ -22,11 +22,21 @@ This class is used to store and further analyze the results of the copulaCorrect
 
 \item{\code{seCoefficients}}{- standard errors of the coefficients.}
 
+\item{\code{residuals}}{- the residuals.}
+
+\item{\code{fitted.values}}{- fitted values.}
+
 \item{\code{rho}}{- the estimate of the correlation between the endogenous variable and the error.}
 
 \item{\code{sigma}}{- standard deviation of the error.}
 
-\item{\code{value}}{- value of the maximum likelihood.}
+\item{\code{logLik}}{- value of the maximum likelihood.}
+
+\item{\code{param}}{- initial values of the parameter. THese are either chosen by the user or are the OLS estimates, with value 0.5 for rho and 0.9 for sigma.}
+
+\item{\code{AIC}}{- Akaike Information Criterion.}
+
+\item{\code{BIC}}{- Bayesian Information Criterion.}
 
 \item{\code{convCode}}{- the convergence code. If is equal to zero, the model converged.}
 
@@ -34,9 +44,9 @@ This class is used to store and further analyze the results of the copulaCorrect
 
 \item{\code{confint}}{- returns the lower and upper limits of the 95\% confidence interval for the estimates.}
 }}
+
 \examples{
 getSlots("copulaREndo")
 
 }
 \keyword{internal}
-

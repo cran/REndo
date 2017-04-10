@@ -1,5 +1,5 @@
 #'@title Bootstrapping Standard Errors
-#'
+#'@aliases boots
 #'@description Performs bootstrapping to obtain the standard errors of the estimates of the model with one continuous endogenous regressor estimated via maximum likelihood
 #'using the \code{\link{copulaCorrection}} function.
 #
@@ -18,6 +18,7 @@
 #'@details The function could be used only when there is a single endogenous regressor and method one is selected in \code{\link{copulaCorrection}}.
 #'of the \code{copulaCorrection} function is used for estimation.
 #'@seealso \code{\link{copulaCorrection}}
+#'@export
 boots <- function(bot,y,X,P,param,intercept = NULL, data=NULL){
    
   if (intercept==FALSE) {
@@ -38,18 +39,20 @@ for (j in 1:bot) {
 boot.se <- sample(length(y), length(P), replace=TRUE) 
 
 y <- y[boot.se]
+X <- as.matrix(X)
 X <- X[boot.se, ]
 P <- as.matrix(P)
 P <- P[boot.se, ]
- 
-cop.opt <- copulaCont1(y,X,P,param, intercept, data=data)
+dataBoot <- cbind(y,X,P) 
+dataBoot <- scale(dataBoot, scale=TRUE)
+cop.opt <- suppressWarnings(copulaCont1(y,X,P,param, intercept, data=dataBoot))
 # put results in a matrix
 # col 1- alfa, col2-n -beta, last 2 cols - rho and sigma
-matrix.out <- matrix(unlist(cop.opt), byrow=TRUE)  # 1 column matrix with the elements returned by optimx
+matrix.out <- matrix(unlist(cop.opt$coef_cop), byrow=TRUE)  # 1 column matrix with the elements returned by optimx
 
-cop.sd[j,1:ncol(X)] <- matrix.out[1:ncol(X),]
-cop.sd[j,(ncol(X)+1)] <- matrix.out[ncol(X)+1,]
-cop.sd[j,(ncol(X)+2)] <- matrix.out[ncol(X)+2,]
+cop.sd[j,1:ncol(X)] <- matrix.out[1:ncol(X),1]
+cop.sd[j,(ncol(X)+1)] <- matrix.out[ncol(X)+1,1]
+cop.sd[j,(ncol(X)+2)] <- matrix.out[ncol(X)+2,1]
 }
 
 sd.b <- rep(0, ncol(X)+2)
@@ -57,8 +60,16 @@ sd.b <- rep(0, ncol(X)+2)
    sd.b[i] <- sd(cop.sd[,i])
  }
  
-res.sd <- list(se.a = sd.b[1], se.betas = sd.b[2:ncol(X)], se.rho = sd.b[length(sd.b)-1], se.sigma = sd.b[length(sd.b)])
-return(res.sd)
+res.sd <- list(se.a = sd.b[1], se.betas = sd.b[2:ncol(X)], se.rho = sd.b[length(sd.b)-1], se.sigma = sd.b[length(sd.b)], reg=as.matrix(X))
+
+coef.table <- res.sd$se.a
+coef.table <- append(coef.table, res.sd$se.betas)
+coef.table <- append(coef.table, res.sd$se.rho)
+coef.table <- append(coef.table, res.sd$se.sigma)
+coef.table <- matrix(coef.table,, ncol=1)
+rownames(coef.table) <- append(colnames(res.sd$reg),c("rho","sigma"))
+colnames(coef.table) <- c("Std.Error")
+return(coef.table)
 }
 
 

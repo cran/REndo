@@ -4,7 +4,7 @@
 \alias{latentIV}
 \title{Fitting Linear Models with one Endogenous Regressor using Latent Instrumental Variables}
 \usage{
-latentIV(formula, param = NULL, data = NULL)
+latentIV(formula, param = NULL, data)
 }
 \arguments{
 \item{formula}{an object of type 'formula': a symbolic description of the model to be fitted. Example \code{var1 ~ var2}, where \code{var1} is a vector
@@ -16,17 +16,20 @@ then the next three parameters are for the variance-covariance matrix. The last 
 initial paramameters values are set equal to the OLS coefficients, the two group means are set to be equal to \code{mean(P)} and \code{ mean(P) + sd(P)}, the
 variance-covariance matrix has all elements equal to 1 while \code{probG1} is set to equal 0.5.}
 
-\item{data}{optional data frame or list containing the variables of the model.}
+\item{data}{data frame or list containing the variables of the model.}
 }
 \value{
 Returns the optimal values of the parameters as computed by maximum likelihood using BFGS algorithm. 
-\item{coefficients}{returns the value of the parameters for the intercept and the endogenous regressor as computed with maximum likelihood.}
-\item{means}{returns the value of the parameters for the means of the two categories/groups of the latent instrumental variable.}
-\item{sigma}{returns the variance-covariance matrix sigma, where on the main diagonal are the variances of the structural error and that of
+\item{coefficients}{ the value of the parameters for the intercept and the endogenous regressor as computed with maximum likelihood.}
+\item{fitted.values}{the fitted values.}
+\item{means}{the value of the parameters for the means of the two categories/groups of the latent instrumental variable.}
+\item{sigma}{the variance-covariance matrix sigma, where on the main diagonal are the variances of the structural error and that of
 the endogenous regressor and the off-diagonal terms are equal to the covariance between the errors.}
-\item{probG1}{returns the probability of being in group one. Since the model assumes that the latent instrumental variable has two groups,
+\item{probG1}{ the probability of being in group one. Since the model assumes that the latent instrumental variable has two groups,
 \code{1-probG1} gives the probability of group 2.}
 \item{value}{the value of the log-likelihood function corresponding to the optimal parameters.}
+\item{AIC}{Akaike Information Criterion.}
+\item{BIC}{Bayesian Information Criterion.}
 \item{convcode}{an integer code, the same as the output returned by \code{optimx}. 0 indicates successful completion. A possible error code is 1 which indicates that the iteration
 limit maxit had been reached.}
 \item{hessian}{a symmetric matrix giving an estimate of the Hessian at the solution found.}
@@ -66,17 +69,12 @@ in a frequentist approach identification issues appear. The optimization algorit
 \examples{
 # load data
 data(dataLatentIV)
-y <- dataLatentIV[,1]
-P <- dataLatentIV[,2]
 # function call without any initial parameter values 
-l  <- latentIV(y ~ P)
+l  <- latentIV(y ~ P, data = dataLatentIV)
 summary(l)
 # function call with initial parameter values given by the user
-l1 <- latentIV(y ~ P, c(2.9,-0.85,0,0.1,1,1,1,0.5))
+l1 <- latentIV(y ~ P, c(2.9,-0.85,0,0.1,1,1,1,0.5), data = dataLatentIV)
 summary(l1)
-}
-\author{
-The implementation of the model formula by Raluca Gui based on the paper of Ebbes et al. (2005).
 }
 \references{
 Ebbes, P., Wedel,M., B\"{o}ckenholt, U., and Steerneman, A. G. M. (2005). 'Solving and Testing for Regressor-Error
@@ -84,7 +82,9 @@ Ebbes, P., Wedel,M., B\"{o}ckenholt, U., and Steerneman, A. G. M. (2005). 'Solvi
 \emph{Quantitative Marketing and Economics},
 \bold{3}:365--392.
 }
+\author{
+The implementation of the model formula by Raluca Gui based on the paper of Ebbes et al. (2005).
+}
 \keyword{endogenous}
 \keyword{instruments}
 \keyword{latent}
-

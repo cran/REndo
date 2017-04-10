@@ -11,9 +11,9 @@ A dataset with one endogenous, discrete regressor used for exemplifying the use 
 \format{
   A data frame with 2500 observations on the following 3 variables.
   \describe{
-   \item{\code{y}}{  a numeric vector representing the dependent variable.}
-   \item{\code{P}}{  a numeric vector representing a discrete and endogenous regressor.}
-   \item{\code{Z}}{  a numeric vector representing the discrete, latent IV used to build P.}
+   \item{\code{y}}{    a numeric vector representing the dependent variable.}
+   \item{\code{P}}{    a numeric vector representing a discrete and endogenous regressor.}
+   \item{\code{Z}}{    a numeric vector representing the discrete, latent IV used to build P.}
   }
 }
 \details{
@@ -25,5 +25,5 @@ where \code{g0 = 2}, \code{b0 = 3} and \code{a1 = -1}.
 
 \keyword{datasets}
 \seealso{
-\code{\link{latentIV}}
+\code{\link{internalIV}}
 }

@@ -7,16 +7,16 @@
 copulaDiscrete(y, X, P, intercept = NULL, data = NULL)
 }
 \arguments{
-\item{y}{the vector containing the dependent variable.}
+\item{y}{vector containing the dependent variable.}
 
-\item{X}{the matrix containing the regressors, with the endogenous variables occupying the last columns.}
+\item{X}{matrix containing the regressors, with the endogenous variables occupying the last columns.}
 
-\item{P}{the matrix containing the discrete endogeneous regressors.}
+\item{P}{matrix containing the discrete endogeneous regressors.}
 
 \item{intercept}{the intercept of the model. It should be specified whether the model should be estimated with or without intercept. 
 If no intercept is desired, intercept should be given the value "FALSE", otherwise the value "TRUE".}
 
-\item{data}{the matrix or data frame containing the dataset used.}
+\item{data}{optional matrix or data frame containing the dataset used.}
 }
 \value{
 Returns an object of class "lm".
@@ -30,4 +30,3 @@ as described in  Zaykin, D V.(2011). "Optimally weighted Z-test is a powerful me
 Park, S. and Gupta, S., (2012), 'Handling Endogeneous Regressors by Joint Estimation Using Copulas', Marketing Science, 31(4), 567-86.
 }
 \keyword{internal}
-

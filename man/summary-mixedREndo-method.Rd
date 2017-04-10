@@ -3,17 +3,17 @@
 \docType{methods}
 \name{summary,mixedREndo-method}
 \alias{summary,mixedREndo-method}
+\alias{summary-methods}
 \title{methods for the multilevelIV function}
 \usage{
-\S4method{summary}{mixedREndo}(object, ...)
+\S4method{summary}{mixedREndo}(object, model)
 }
 \arguments{
 \item{object}{object of class multilevelIV}
 
-\item{...}{extra named arguments}
+\item{model}{for which of the estimated models should the coefficients be displayed. If \code{model="all"}, the coefficients of all estimated models will be printed.}
 }
 \description{
 prints the summary for the model's parameters
 }
 \keyword{internal}
-
