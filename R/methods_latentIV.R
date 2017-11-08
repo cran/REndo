@@ -29,7 +29,7 @@ setMethod(f = "summary", signature= c(object="livREndo"), definition=function(ob
             names.coef <- all.vars(z@formula[[3]])
             
             coef.table <- cbind(est,se, t_val, pval)
-            colnames(coef.table) <- c("Estimate","Std. Error", "t value","Pr(>|t|)")
+            colnames(coef.table) <- c("Estimate","Std. Error", "t-value","Pr(>|t|)")
             rownames(coef.table) <- c("Intercept",names.coef)
             
             cat("\nCall:\n")

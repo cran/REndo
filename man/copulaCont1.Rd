@@ -4,22 +4,20 @@
 \alias{copulaCont1}
 \title{Fitting Linear Models with One Enedogenous Regressor using Gaussian Copula}
 \usage{
-copulaCont1(y, X, P, param = NULL, intercept = NULL, data = NULL)
+copulaCont1(formula, endoVar, param = NULL, intercept = NULL, data)
 }
 \arguments{
-\item{y}{a vector or matrix containing the dependent variable.}
+\item{formula}{the model formula, e.g. \code{y ~ X1 + X2 + X3}.}
 
-\item{X}{a data frame or matrix containing the regressors of the model, both exogeneous and endogeneous. The last column should contain the endogeneous variable.}
+\item{endoVar}{a string with the name of the endogenous variable/s, in quotation marks.}
 
-\item{P}{a vector containing the continuous, non-normally distributed endogeneous variable.}
+\item{param}{initial values for the parameters to be optimized over.}
 
-\item{param}{Initial values for the parameters to be optimized over.}
-
-\item{intercept}{It should be specified whether the model should be estimated with or without intercept. 
-If no intercept is desired or the regressors matrix \code{X} contains already
+\item{intercept}{an optional parameter. The model is estimated by default with 
+intercept. If no intercept is desired or the regressors matrix \code{X} contains already
 a column of ones, intercept should be given the value "FALSE", otherwise the value "TRUE".}
 
-\item{data}{optional data frame or matrix containing the variables of the model.}
+\item{data}{a data frame or matrix containing the variables of the model.}
 }
 \value{
 Returns a list with the best set of parameters found.

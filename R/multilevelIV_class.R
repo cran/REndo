@@ -2,11 +2,11 @@
 #'@description defines the slots of class mixedREndo.
 
 #' @slot coefficients - the estimated coefficients. 
-#' @slot coefSdErr - stabdard errors of the estimates.
-#' @slot formula - the formula used for estimation.
+#' @slot coefSdErr - standard errors of the estimates.
+#' @slot mixedCall - function call.
 #' @slot vcovMat - variance-covariance matrix.
 #' @slot weightMat - the weight matrix used for estimation.
-
+#' @slot omittedVarTest - Omitted Variable Test statistic and p-value.
 
 #' @name mixedREndo-class
 #' @exportClass mixedREndo
@@ -25,18 +25,20 @@ setClass("mixedREndo",
     
     coefficients = "matrix",
     coefSdErr = "list",
-    formula = "formula",
+    mixedCall= "call",
     vcovMat = "matrix",
-    weightMat = "matrix"
+    weightMat = "matrix",
+    omittedVarTest = "list"
+    
   ),
 
   prototype = list(
                   
                    coefficients = matrix(NA),
                    coefSdErr = list(NA),
-                   formula = y~x,
                    vcovMat = matrix(NA),
-                   weightMat = matrix(NA)
+                   weightMat = matrix(NA),
+                   omittedVarTest = list(NA)
                   
   )
 )

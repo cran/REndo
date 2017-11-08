@@ -4,24 +4,21 @@
 \alias{boots}
 \title{Bootstrapping Standard Errors}
 \usage{
-boots(bot, y, X, P, param, intercept = NULL, data = NULL)
+boots(bot, formula, endoVar, param, intercept = NULL, data)
 }
 \arguments{
 \item{bot}{number of bootstrap replicates.}
 
-\item{y}{the vector or matrix containing the dependent variable.}
+\item{formula}{the model formula, e.g. \code{y ~ X1 + X2 + P}.}
 
-\item{X}{the data frame or matrix containing the regressors of the model, both exogeneous and endogeneous. The last column/s should contain the endogeneous variable/s.}
-
-\item{P}{the vector containing the continuous, non-normally distributed endogeneous variable.}
+\item{endoVar}{a string with the name of the endogenous variable/s, in quotation marks.}
 
 \item{param}{initial values for the parameters to be optimized over. See \code{\link{copulaCorrection}} for more details.}
 
 \item{intercept}{an optional parameter. The model is estimated by default with 
-intercept. If no intercept is desired or the regressors matrix \code{X} contains already
-a column of ones, intercept should be given the value "no".}
+intercept. If no intercept is desired in model estimation, intercept should be given the value "FALSE", otherwise the value "TRUE".}
 
-\item{data}{optional data frame or matrix containing the variables of the model.}
+\item{data}{a data frame or matrix containing the variables of the model.}
 }
 \value{
 Returns the standard errors of the estimates of the model using the copula method 1 described in Park and Gupta (2012). See Details section of \code{\link{copulaCorrection}}.

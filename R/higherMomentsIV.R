@@ -7,14 +7,13 @@
 #' An important assumption for identification is that the endogenous variable has a skewed distribution.  
 #
 # Arguments
-#'@param    y   the vector or matrix containing the dependent variable.
-#'@param    X   the data frame or matrix containing the exogenous regressors of the model.
-#'@param    P   the endogenous variables of the model as columns of a matrix or dataframe.  
+#'@param    formula   the model formula, e.g. \code{y ~ X1 + X2 + P}.
+#'@param    endoVar   a string with the name/s of the endogenous variable/s.
 #'@param    G   the functional form of G. It can take four values, \code{x2}, \code{x3},\code{lnx} or \code{1/x}. The last two forms are conditional on the values of the exogenous variables: greater than 1 or different from 0 respectively.
 #'@param    IIV  stands for "internal instrumental variable". It can take six values: \code{g,gp,gy,yp,p2} or \code{y2}. Tells the function 
 #'which internal instruments to be constructed from the data. See "Details" for further explanations.
 #'@param EIV  stands for "external instrumental variable". It is an optional argument that lets the user specify any external variable(s) to be used as instrument(s).
-#'@param data  optional data frame or list containing the variables in the model.
+#'@param data  a matrix or data frame containing the variables of the model.
 #
 
 #'@details 
@@ -71,19 +70,17 @@
 #'@examples 
 #'#load data 
 #'data(dataHigherMoments)
-#'y <- dataHigherMoments[,1]
-#'X <- cbind(dataHigherMoments[,2],dataHigherMoments[,3])
-#'colnames(X) <- c("X1","X2")
-#'P <- dataHigherMoments[,4]
-#'
 #'# call higherMomentsIV with internal instrument yp = (Y - mean(Y))(P - mean(P))
-#'h <- higherMomentsIV(y,X,P, G = "x2", IIV = "yp")  
+#'h <- higherMomentsIV(formula = y ~ X1 + X2 + P,endoVar = "P", G = "x2", IIV = "yp", 
+#'    data = dataHigherMoments)  
 #'
 #'# build an additional instrument p2 = (P - mean(P))^2  using the internalIV() function 
-#'eiv <- internalIV(y,X,P, G="x2", IIV = "p2")
+#'eiv <- internalIV(formula = y ~ X1 + X2 + P, endoVar = "P", G="x2", IIV = "p2", 
+#'       data = dataHigherMoments)
 #'
 #'# use the additional variable as external instrument in higherMomentsIV()
-#'h1 <- higherMomentsIV(y,X,P,G = "x2",IIV = "yp", EIV=eiv) 
+#'h1 <- higherMomentsIV(formula = y ~ X1 + X2 + P, endoVar = "P", G = "x2",IIV = "yp", EIV=eiv, 
+#'      data = dataHigherMoments) 
 #'summary(h1)
 #'
 #'# get the robust standard errors using robust.se() function from package ivpack
@@ -94,7 +91,18 @@
 #'@export
 
 
-higherMomentsIV <- function(y,X,P, G = NULL, IIV = c("g","gp","gy","yp","p2","y2"), EIV=NULL, data=NULL){
+higherMomentsIV <- function(formula, endoVar, G = NULL, IIV = c("g","gp","gy","yp","p2","y2"), EIV = NULL, data){
+  
+  
+  mf <- model.frame(formula = formula, data = data)
+  y <- mf[,1]
+  regs <- unlist(strsplit(as.character(formula)[3], "\\(")) 
+  predictors <- unlist(strsplit(regs[1], " [+] "))
+  
+  regressors <- mf[,2:dim(mf)[2]]
+  X <- regressors[,-which(colnames(regressors) %in% endoVar)] # only exogenous
+  P <- as.matrix(regressors[,which(colnames(regressors) %in% endoVar)])
+  colnames(P) <- endoVar
   
   # check to see if any external instruments were provided
   if (!is.null(EIV)) {
@@ -103,7 +111,7 @@ higherMomentsIV <- function(y,X,P, G = NULL, IIV = c("g","gp","gy","yp","p2","y2
   
  # computes the internal IVs proposed by Lewbel 97 - g, gp, gy, yp, y2, p2, depending on 
 # the values provided by the user in IIV
-  IV <- internalIV(y,X,P,G,IIV, data)
+  IV <- internalIV(formula, endoVar, G,IIV, data)
   
   # check if external instruments were provided. If, yes, add them to the IIV
   if (is.null(EIV)){IV1 <- IV} else {
@@ -116,7 +124,8 @@ higherMomentsIV <- function(y,X,P, G = NULL, IIV = c("g","gp","gy","yp","p2","y2
   
   # uses ivreg function from \pkg{AER} for users to be able to use afterwards the package ivpack 
   # higherMomentsIV should return an object of class "ivreg"
-  dataHM <- data.frame(cbind(X,P))
+  dataHM <- cbind.data.frame(X,P)
+  X <- as.matrix(X)
   res <- AER::ivreg(y ~.|X + IV1, data = dataHM, x=TRUE )
   
   res$call <- match.call()

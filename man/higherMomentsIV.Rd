@@ -4,15 +4,13 @@
 \alias{higherMomentsIV}
 \title{Fitting Linear Models with Endogenous Regressors using Lewbel's Higher Moments Approach}
 \usage{
-higherMomentsIV(y, X, P, G = NULL, IIV = c("g", "gp", "gy", "yp", "p2",
-  "y2"), EIV = NULL, data = NULL)
+higherMomentsIV(formula, endoVar, G = NULL, IIV = c("g", "gp", "gy", "yp",
+  "p2", "y2"), EIV = NULL, data)
 }
 \arguments{
-\item{y}{the vector or matrix containing the dependent variable.}
+\item{formula}{the model formula, e.g. \code{y ~ X1 + X2 + P}.}
 
-\item{X}{the data frame or matrix containing the exogenous regressors of the model.}
-
-\item{P}{the endogenous variables of the model as columns of a matrix or dataframe.}
+\item{endoVar}{a string with the name/s of the endogenous variable/s.}
 
 \item{G}{the functional form of G. It can take four values, \code{x2}, \code{x3},\code{lnx} or \code{1/x}. The last two forms are conditional on the values of the exogenous variables: greater than 1 or different from 0 respectively.}
 
@@ -21,7 +19,7 @@ which internal instruments to be constructed from the data. See "Details" for fu
 
 \item{EIV}{stands for "external instrumental variable". It is an optional argument that lets the user specify any external variable(s) to be used as instrument(s).}
 
-\item{data}{optional data frame or list containing the variables in the model.}
+\item{data}{a matrix or data frame containing the variables of the model.}
 }
 \value{
 Returns an object of class \code{ivreg}, with the following components:
@@ -76,19 +74,17 @@ in equation \code{1} under the assumptions exposed in Lewbel(1997).
 \examples{
 #load data 
 data(dataHigherMoments)
-y <- dataHigherMoments[,1]
-X <- cbind(dataHigherMoments[,2],dataHigherMoments[,3])
-colnames(X) <- c("X1","X2")
-P <- dataHigherMoments[,4]
-
 # call higherMomentsIV with internal instrument yp = (Y - mean(Y))(P - mean(P))
-h <- higherMomentsIV(y,X,P, G = "x2", IIV = "yp")  
+h <- higherMomentsIV(formula = y ~ X1 + X2 + P,endoVar = "P", G = "x2", IIV = "yp", 
+   data = dataHigherMoments)  
 
 # build an additional instrument p2 = (P - mean(P))^2  using the internalIV() function 
-eiv <- internalIV(y,X,P, G="x2", IIV = "p2")
+eiv <- internalIV(formula = y ~ X1 + X2 + P, endoVar = "P", G="x2", IIV = "p2", 
+      data = dataHigherMoments)
 
 # use the additional variable as external instrument in higherMomentsIV()
-h1 <- higherMomentsIV(y,X,P,G = "x2",IIV = "yp", EIV=eiv) 
+h1 <- higherMomentsIV(formula = y ~ X1 + X2 + P, endoVar = "P", G = "x2",IIV = "yp", EIV=eiv, 
+     data = dataHigherMoments) 
 summary(h1)
 
 # get the robust standard errors using robust.se() function from package ivpack

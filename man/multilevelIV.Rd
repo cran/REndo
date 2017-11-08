@@ -19,7 +19,7 @@ returns the estimated coefficients together with their standard errors and p-val
 \item{coefSdErr}{the standard errors of the estimated coefficients.}
 \item{vcovMat}{the variance-covariance matrix.}
 \item{weigthMat}{the weight matrix used in estimation.}
-\item{formula}{the formula of the estimated model.}
+\item{mixedCall}{the call of the estimated model.}
 }
 \description{
 Estimates multilevel models (max. 3 levels) employing the GMM approach presented in Kim and Frees (2007). One of the important features is that, using the hierarchical 
@@ -36,14 +36,13 @@ when all variables are assumed endogenous. In between different GMM estimators a
 }
 \examples{
 \dontrun{
-data(tScores)
-endoVars <- tScores[,RETAINED:S_FREELU, with=FALSE]
-formula1 <- 
-TLI ~ GRADE_3 + RETAINED + SWITCHSC + S_FREELU + FEMALE + BLACK + HISPANIC + 
-OTHER + C_COHORT + T_EXPERI + CLASS_SI + P_MINORI + 
-(1+GRADE_3 | CID) + (1 | SID)
-model1<- multilevelIV(formula1, endoVars, data=tScores)
-coef(model1)
+data(dataMultilevelIV)
+endoVars <- matrix(dataMultilevelIV[,"X15"])
+colnames(endoVars) <- c("X15")
+formula1 <- y ~ X11 + X12 + X13 + X14 + X15 + X21 + X22 + X23 + X24 + 
+X31 + X32 + X33 + (1 + X11 | CID) + (1|SID)
+model1 <- multilevelIV(formula=formula1, endoVar=endoVars, data=dataMultilevelIV)
+summary(model1,"REF")
 }
 }
 \references{

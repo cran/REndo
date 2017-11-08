@@ -1,12 +1,9 @@
 # Copyright (c) 2016. All rights reserved. See the file LICENSE for license terms.
-######################################################################################### # File: KF07_MainScript.R
-# Proj: PhD.1
+#########################################################################################
+# Proj: REndo R package
 # Desc: Kim and Frees 2007 replication paper
 # Auth: Raluca Gui (RG) # Date: 2015/02/15
-# Input:
-# - Input1: data frame dallas2485 (students var) and dallas60 (school vars)#
-# Output:
-# - Output1: GMM estimators and Hausman test
+
 
 #'@title     Multilevel GMM estimation
 #'@description    the backbone function for the multilevelIV function
@@ -17,8 +14,7 @@
 #'@keywords internal
 # endoVar should be a matrix with the endogenous variables
 multilevelGMM <- function(formula, endoVar, data = NULL) {
-# create a Rendo pkg environment
-rendo.env <- new.env()
+rendo.env <- new.env()    # create a REndo pkg environment
 mf <- model.frame(formula = formula, data = data)
 y <- mf[,1]
 nTot <- length(y)
@@ -26,30 +22,26 @@ regs <- unlist(strsplit(as.character(formula)[3], "\\("))
 nLevels <- length(regs)    # the number of levels
 predictors <- unlist(strsplit(regs[1], " [+] "))
 
-
 # list of the random part of the formula
 rTrms <- lme4::lFormula(formula = formula, data=data)$reTrms
-
 # list of grouping factors used in the random-effects terms- e.g. id, school number, etc.
-listIDs <- rTrms$flist # NEWCHILD, NEWSCHOOL
+listIDs <- rTrms$flist
 # max number of levels of the first grouping factor - level 2
 assign("nLev2", max(as.numeric(as.character(listIDs[[1]]))), envir=rendo.env)
-#nLev2 <- max(as.numeric(as.character(listIDs[[1]])))
+
 data <- as.data.frame(data)
-lev2ID <- as.numeric(as.character(listIDs[[1]]))
-assign("idL2", as.numeric(listIDs[,1]), envir=rendo.env) # Level2
-#idL2 <- as.numeric(listIDs[,1])
+lev2ID <- as.numeric(unlist(listIDs[[1]]))
+assign("idL2", as.numeric(unlist(listIDs[1])), envir=rendo.env) # Level2
 maxL2 <- max(rendo.env$idL2)    
 minL2 <- min(rendo.env$idL2)  
 if (nLevels==3){
-#idL3 <- as.data.frame(as.numeric(listIDs[,2]))
-assign("idL3", as.data.frame(as.numeric(listIDs[,2])), envir=rendo.env)
+assign("idL3", as.numeric(unlist(listIDs[2])), envir=rendo.env)
 maxL3 <- max(rendo.env$idL3)    
 minL3 <- min(rendo.env$idL3)    
-assign("nLev3", max(as.numeric(as.character(listIDs[[2]]))), envir=rendo.env)
-#nLev3 <- max(as.numeric(as.character(listIDs[[2]])))
+assign("nLev3", max(as.numeric(unlist(listIDs[[2]]))), envir=rendo.env)
+
 }
-## Z contains the random variables
+## Z contains slope variables - assumed to be exogenous
 Z1 <- list()
 zz <- matrix(c(1), nTot, 1)
 # for 3 levels rTrms#cnms always has length 2
@@ -223,9 +215,9 @@ for (scount in minL3:maxL3 ){
   }
     }
   
-#----------------------
-#  gives the IVs to be used in the GMM estimation, at the 2nd level, HIVc1 and HIVc2, adn 3rd level HIVs1 and HIVs2
-# ---------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------
+#  compute the IVs to be used in the GMM estimation, at the 2nd level, HIVc1 and HIVc2, and 3rd level HIVs1 and HIVs2
+# -----------------------------------------------------------------------------------------------------------------
 # 
 qHIVc1 <- K
 HIVc1 <- matrix(c(0),nTot, qHIVc1)
@@ -246,8 +238,8 @@ if (nLevels==3) {   # if there are 3 levels
     if (Tl2!=0) {
       
       scloc <- which(rendo.env$idL2 %in% sc)
-      Xl2 <- as.matrix(X[scloc,])
-      X1l2 <- as.matrix(X1[scloc,])
+      Xl2 <- data.matrix(X[scloc,])
+      X1l2 <- data.matrix(X1[scloc,])
       Zl2 <- Z[[1]][scloc,]
       Wl2 <- as.matrix(W[scloc,scloc])
       
@@ -272,9 +264,9 @@ if (nLevels==3) {   # if there are 3 levels
     } else {
       cat("END")}
   }
-    #----------------------
-  #  gives the IVs to be used in the GMM estimation, at the 3nd level, HIVs1 and HIVs2 
-  
+  #---------------------------------------------------------------------------------------
+  #  comute the IVs to be used in the GMM estimation, at the 3nd level, HIVs1 and HIVs2 
+  # --------------------------------------------------------------------------------------
   for (scount in minL3:maxL3) {
     
     #CT = how many times does school scount appear
@@ -283,8 +275,8 @@ if (nLevels==3) {   # if there are 3 levels
     } else {
       # sloc = the position of school scount
       sloc <- which(rendo.env$idL3==scount)
-      Xl3 <- as.matrix(X[sloc,])
-      X1l3 <- as.matrix(X1[sloc, ])
+      Xl3 <- data.matrix(X[sloc,])
+      X1l3 <- data.matrix(X1[sloc, ])
       Zl3 <- Z[[2]][sloc,]
       Wl3 <- W[sloc,sloc]
       
@@ -303,8 +295,8 @@ if (nLevels==3) {   # if there are 3 levels
     } else {
       # sloc = the position of school scount
       sloc <- which(rendo.env$idL2==scount)
-      Xl2 <- as.matrix(X[sloc,])
-      X1l2 <- as.matrix(X1[sloc, ])
+      Xl2 <- data.matrix(X[sloc,])
+      X1l2 <- data.matrix(X1[sloc, ])
       Zl2 <- as.matrix(Z[[1]][sloc,])
       Wl2 <- W[sloc,sloc]
  
@@ -325,7 +317,9 @@ if (nLevels==3) {   # if there are 3 levels
 InterimRes <- list(Levels= nLevels, Wmat = W, Vmat=V, HIVc1=HIVc1, HIVc2=HIVc2, HIVs1=HIVs1, HIVs2=HIVs2, pred=predictors, X=X, y=y, Z=Z, nTot=nTot, obsid=obsid, envir=rendo.env)
 InterimRes
 }
-################################################
+##############################################################################
+####################### VARCOVAR MATRIX ######################################
+##############################################################################
 VarCor <- function(formula, data, nLevels,rTrms){
   
   modelREE <- lme4::lmer(formula=formula, data=data)
@@ -387,12 +381,13 @@ VarCor <- function(formula, data, nLevels,rTrms){
  
   VarCorRes  
 }
-
-################################################
+##############################################################################
+###################### GMM Estimation ########################################
+##############################################################################
 GmmEstim <- function(y,X,HIV,id, Wmat, Vmat, nLevels, nTot, obsid, envir){
 
-  Wf <- as.matrix(Wmat)
-  Vf <- as.matrix(Vmat)
+  Wf <- data.matrix(Wmat)
+  Vf <- data.matrix(Vmat)
  
   if (nLevels==3) {    
     numindep <- (id==0)*nTot + (id==1) * envir$nLev2 + (id==2)*envir$nLev3
@@ -400,7 +395,7 @@ GmmEstim <- function(y,X,HIV,id, Wmat, Vmat, nLevels, nTot, obsid, envir){
     numindep <- (id==0)*nTot + (id==1) * envir$nLev2 
   }
   yf <- Wf %*% y
-  Xf <- Wf %*% as.matrix(X)
+  Xf <- Wf %*% data.matrix(X)
   
   # see KM07 Appendix 1
   GHat <- t(HIV) %*% Xf/numindep
@@ -433,18 +428,18 @@ GmmEstim <- function(y,X,HIV,id, Wmat, Vmat, nLevels, nTot, obsid, envir){
     # there is a pb if a childID appears just once- rowSums gives error-it needs residWi to have 2 dimensions - so we create special case when residWi is a number
     if (length(iloc) !=1){
       rwrw <- tcrossprod(residWi)
-      rwrw <- Wf[iloc,iloc] %*% (rwrw %*% Wf[iloc,iloc])
+      rwrw <- Wf[iloc,iloc] %*% (as.matrix(rwrw) %*% Wf[iloc,iloc])
       Vf[iloc,iloc] <- Wf[iloc,iloc] %*% Vf[iloc,iloc] %*% Wf[iloc,iloc]
       
       
-      HIV[iloc,] <- as.matrix(HIV[iloc,])
-      LambdaHat <- LambdaHat + crossprod(HIV[iloc,], rwrw) %*%  HIV[iloc,]
+      HIV[iloc,] <- data.matrix(HIV[iloc,])
+      LambdaHat <- LambdaHat + crossprod(HIV[iloc,], as.matrix(rwrw)) %*%  HIV[iloc,]
       Lambda <- Lambda + t(HIV[iloc,]) %*% Vf[iloc,iloc] %*% HIV[iloc,]
     } else {
       rwrw <- Wf[iloc,iloc] * residWi * Wf[iloc,iloc]
       rwrw <- tcrossprod(rwrw)
       Vf[iloc,iloc] <- Wf[iloc,iloc] %*% Vf[iloc,iloc] %*% Wf[iloc,iloc]
-      LambdaHat <- LambdaHat +  HIV[iloc,] * (rwrw * HIV[iloc,])
+      LambdaHat <- LambdaHat +  HIV[iloc,] * (as.vector(rwrw) * HIV[iloc,])
       Lambda <- Lambda + HIV[iloc,] * Vf[iloc,iloc] * HIV[iloc,]
     } 
   }
@@ -459,3 +454,87 @@ GmmEstim <- function(y,X,HIV,id, Wmat, Vmat, nLevels, nTot, obsid, envir){
   dd <- list(bIV=bbIV, MSdError=Mstderr_bIV, resid = residW, Gamma = GammaH)
   dd
 }
+
+##############################################################################
+#######################  Omitted Variable Test ##############################
+##############################################################################
+OmittedVarTest <- function(HIV1,HIV2,m1,m2,id,nLevels, nTot, obsid, envir){
+  
+  if (nLevels==3){
+  idnum <- (id==0)*obsid + (id==1) *envir$idL2  + (id==2)*envir$idL3} else{
+    
+    idnum <- (id==0)*obsid + (id==1) *envir$idL2 }
+   
+  r1 <- ncol(HIV1);  r2 <- ncol(HIV2);
+  
+  LambdaHat11 <- matrix(c(0),r1,r1)
+  LambdaHat22 <-  matrix(c(0),r2,r2)
+  LambdaHat12 <-  matrix(c(0),r1,r2)
+  numindep <- nTot
+  
+  GammaH1 <- m1$Gamma
+  GammaH2 <- m2$Gamma
+  for (ccount in 1: numindep){
+    
+    iloc <- which(idnum == ccount);
+    
+    residWi <- as.matrix(m2$resid[iloc,])
+    
+    if (length(iloc)!=1) {
+      
+      rwrw <- residWi %*% t(residWi)
+      
+      
+      LambdaHat11 <- LambdaHat11 + t(HIV1[iloc,]) %*% rwrw %*% HIV1[iloc,]
+      LambdaHat22 <- LambdaHat22 + t(HIV2[iloc,]) %*% rwrw %*% HIV2[iloc,]
+      LambdaHat12 <- LambdaHat12 + t(HIV1[iloc,]) %*% rwrw %*% HIV2[iloc,]
+    } else 
+    {    rwrw <- t(residWi) %*% residWi
+    
+    LambdaHat11 <- LambdaHat11 + HIV1[iloc,] %*% as.matrix(rwrw) %*% t(HIV1[iloc,])
+    LambdaHat22 <- LambdaHat22 + HIV2[iloc,] %*% as.matrix(rwrw) %*% t(HIV2[iloc,])
+    LambdaHat12 <- LambdaHat12 + HIV1[iloc,] %*% as.matrix(rwrw) %*% t(HIV2[iloc,])
+    }
+  }
+  LambdaHat11 <- LambdaHat11/numindep
+  LambdaHat22 <- LambdaHat22/numindep
+  LambdaHat12 <- LambdaHat12/numindep;
+  
+  
+  OmegaHat <- GammaH2 %*% LambdaHat22 %*% t(GammaH2) + GammaH1 %*% LambdaHat11 %*% t(GammaH1) - GammaH1 %*% LambdaHat12 %*% t(GammaH2) -  t(GammaH1 %*% LambdaHat12 %*% t(GammaH2))
+  
+  commonrows <- which(m1$bIV!=0) 
+  dbeta <- m1$bIV[commonrows,] - m2$bIV[commonrows,]
+  diffbeta <- m1$bIV[commonrows,] - m2$bIV[commonrows,]
+  diff_VarCov <- corpcor::make.positive.definite(OmegaHat[commonrows, commonrows]/numindep)
+  stat_ht <- as.numeric(t(diffbeta) %*% solve(diff_VarCov,diffbeta))
+  names(stat_ht) <- "chisq"
+  df <- Matrix::rankMatrix(OmegaHat[commonrows, commonrows])
+  pval_ht <- pchisq(stat_ht,df=df,lower.tail = FALSE)
+  
+  res <- list(stat=stat_ht, df = df, pval = pval_ht)
+  
+}
+
+##############################################################################
+####################### MISC Functions########################################
+##############################################################################
+oneof <- function(x){
+  x <- names(x)
+  last <- x[length(x)]
+  x <- x[-length(x)]
+  x <- paste(x,collapse=", ")
+  x <- paste(x,last,sep=" and ")
+  x
+}
+
+model.list.3levels <- c(FE_L2 = "FE_L2",
+                        FE_L3  = "FE_L3",
+                        GMM_L2 = "GMM_L2",
+                        GMM_L3 = "GMM_L3",
+                        REF    = "REF"
+)
+model.list.2levels <- c(FE_L2 = "FE_L2",
+                        GMM_L2 = "GMM_L2",
+                        REF     = "REF"
+)

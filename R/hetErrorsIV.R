@@ -8,8 +8,8 @@
 #'the function, as well as the name. 
 #
 # Arguments
-#'@param    formula   an object of class \code{formula}.
-#'@param    data   the data frame containing these data. This argument is mandatory.
+#'@param    formula   the model formula, e.g.\code{y ~ X1 + X2 + P}.
+#'@param    data   the data frame containing the dataset. This argument is mandatory.
 #'@param    clustervar   a character value naming the cluster on which to adjust the standard errors and test statistics. 
 #'@param    robust   if TRUE the function reports standard errors and test statistics that have been corrected for the presence heteroscedasticity using White's method.
 
@@ -41,10 +41,9 @@
 #'@references  Fernihough, A. (2014). \bold{ivlewbel} package: Uses heteroscedasticity to estimate mismeasured and endogenous regressor models.
 #'@seealso \code{\link[ivlewbel]{lewbel}}, \code{\link{higherMomentsIV}}, \code{\link{latentIV}},  \code{\link{copulaCorrection}}, \code{\link[AER]{ivreg}}.
 #'@examples 
-#'data(dataHigherMoments)
-#'dataHetIV <- as.data.frame(dataHigherMoments)
-#'hIV <- hetErrorsIV(y ~ P| X1 + X2 | X1 + X2, data = dataHetIV)
-#'summary(hIV)
+#'data(dataHetIV)
+#'resultsHetIV <- hetErrorsIV(y ~ P| X1 + X2 | X1 + X2, data = dataHetIV)
+#'summary(resultsHetIV)
 #' @export
 hetErrorsIV <- function(formula, data, clustervar = NULL, robust = TRUE){
     
@@ -52,7 +51,12 @@ hetErrorsIV <- function(formula, data, clustervar = NULL, robust = TRUE){
     
     res <- lewbel.est(formula, data, clustervar, robust)
     
-    object@coefficients <- res$coefs 
+    mf <- model.frame(formula = formula, data = data)
+
+    nreg <- nrow(res$coefs)    # number of regressors
+    o <- c(2,1,seq(3,nreg,1))  # put intercept as first row
+    resCoef <- res$coef[o,]
+    object@coefficients <- resCoef
     object@formula <- res$formula
     object@call <- match.call()
     object@obs <- res$num.obs

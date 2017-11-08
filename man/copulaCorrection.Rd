@@ -4,14 +4,12 @@
 \alias{copulaCorrection}
 \title{Fitting Linear Models Endogeneous Regressors using Gaussian Copula}
 \usage{
-copulaCorrection(y,X,P,param,type, method, intercept, data)
+copulaCorrection(formula, endoVar, param, type, method, intercept, data)
 }
 \arguments{
-\item{y}{the vector or matrix containing the dependent variable.}
+\item{formula}{the model formula, e.g. \code{y ~ X1 + X2 + X3}.}
 
-\item{X}{the data frame or matrix containing the regressors of the model, both \emph{exogeneous and endogeneous}. The \emph{last column/s should contain the endogenous variable/s}.}
-
-\item{P}{the matrix.vector containing the endogenous variables.}
+\item{endoVar}{a string with the name/s of the endogenous variables.}
 
 \item{param}{the vector of initial values for the parameters of the model to be supplied to the optimization algorithm. The parameters to be estimated are \code{theta = \{b,a,rho,sigma\}}, where
 \code{b} are the parameters of the exogenous variables, \code{a} is the parameter of the endogenous variable, \code{rho} is the parameter for the correlation between the error and the endogenous regressor, while 
@@ -24,8 +22,7 @@ and "2" is the equivalent OLS approach described in the same paper. "1" can be a
 With one discrete or more than one continuous endogenous regressors, the second method is applied by default.}
 
 \item{intercept}{optional parameter. The model is estimated by default with 
-intercept. If no intercept is desired or the regressors matrix \code{X} contains already
-a column of ones, intercept should be given the value "no".}
+intercept. If no intercept is desired in the model estimation, intercept should be given the value "FALSE".}
 
 \item{data}{data frame or matrix containing the variables of the model.}
 }
@@ -54,33 +51,29 @@ can be specified by using method two - "method="2"".
 #load dataset dataCopC1, where P is endogenous, continuous and not normally distributed
 
 data(dataCopC1)
-y <- dataCopC1[,1]
-X <- dataCopC1[,2:5]
-P <- dataCopC1[,5]
 \dontrun{
-c1 <- copulaCorrection(y, X, P, type = "continuous", method = "1", intercept=FALSE)
+
+c1 <- copulaCorrection(formula = y ~ X1 + X2 + P, endoVar ="P", type = "continuous", method = "1",
+intercept=TRUE, data=dataCopC1)
 summary(c1)
 }
 
 # an alternative model can be obtained using "method ="2"".
-c12 <- copulaCorrection(y, X, P, type = "continuous", method = "2", intercept=FALSE)
+c12 <- copulaCorrection(formula = y ~ X1 + X2 + P, endoVar = "P", type = "continuous", method = "2",
+intercept=TRUE, data = dataCopC1)
 summary(c12)
 
 # with 2 endogeneous regressors no initial parameters are needed, the default is the augmented OLS.
 data(dataCopC2)
-y <- dataCopC2[,1]
-X <- dataCopC2[,2:6]
-P <- dataCopC2[,5:6]
-c2 <- copulaCorrection(y, X, P, type = "continuous" ,method="2", intercept=FALSE)
+c2 <- copulaCorrection(formula = y ~ X1 + X2 + P1 + P2, endoVar = c("P1","P2"), 
+type = "continuous", method="2", intercept=TRUE, data=dataCopC2)
 summary(c2)
 
 # load dataset with 1 discrete endogeneous variable. 
 # having more than 1 discrete endogenous regressor is also possible
 data(dataCopDis)
-y <- dataCopDis[,1]
-X <- dataCopDis[,2:5]
-P <- dataCopDis[,5]
-c3 <- copulaCorrection(y, X, P, type = "discrete", intercept=FALSE, data = dataCopDis)
+c3 <- copulaCorrection(formula = y ~ X1 + X2 + P, endoVar = "P", type = "discrete", 
+intercept=TRUE, data = dataCopDis)
 summary(c3)
 }
 \references{

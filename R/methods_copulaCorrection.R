@@ -23,11 +23,15 @@ setMethod(f = "coef", signature= c(object="copulaREndo"), definition=function(ob
               # z=score
               z_val_table <- coef.table[,1]/z@seCoefficients  # z-score endogenous variable
               # p-values
-              pval <- 2*pt(q=(-abs(z_val_table)), df=(length(z@regressors[,1])-1))  
+              pval <- 2*stats::pt(q=(-abs(z_val_table)), df=(length(z@regressors[,1])-1))  
               rownames(z@seCoefficients) <- NULL    # remove the row names not to appear twice
               colnames(z@seCoefficients) <- NULL    # remove the row names not to appear twice
               coef.table <- cbind(coef.table,round(z@seCoefficients,5))
-              rownames(coef.table) <- append(colnames(z@regressors),c("rho","sigma"))
+              if (mcl$intercept == TRUE){
+                rownames(coef.table) <- append(c("Intercept"),colnames(z@regressors),c("rho","sigma"))
+              } else {
+                rownames(coef.table) <- append(colnames(z@regressors),c("rho","sigma"))
+                }
               coef.table <- cbind(coef.table, round(z_val_table,3))
               coef.table <- cbind(coef.table, round(pval,3))
              # rownames(coef.table) <- colnames(z@regressors)
@@ -37,7 +41,9 @@ setMethod(f = "coef", signature= c(object="copulaREndo"), definition=function(ob
             if ("2" %in% mcl$method) {
               z <- object
               coef.table <- matrix(z@coefficients,ncol=1)
-              rownames(coef.table) <- colnames(z@regressors)
+              if (mcl$intercept==TRUE){
+              rownames(coef.table) <- append(c("Intercept"),colnames(z@regressors))
+              }
               colnames(coef.table) <- c("Estimate")
              #cat("\nCoefficients:\n"))
               invisible(coef.table)
@@ -49,7 +55,9 @@ setMethod(f = "coef", signature= c(object="copulaREndo"), definition=function(ob
                     est <- z@coefficients # estimates value
                     coef.table <- est
                     coef.table <- matrix(coef.table, , ncol=1)
-                    rownames(coef.table) <- colnames(z@regressors)
+                    if (mcl$intercept==TRUE){
+                       rownames(coef.table) <- append(c("Intercept"),colnames(z@regressors))
+                    }
                     colnames(coef.table) <- c("Estimate")
                     # cat("\nCoefficients:\n")
                     invisible(coef.table) # print the coefficient
@@ -81,15 +89,20 @@ setMethod(f = "summary", signature= c(object="copulaREndo"), definition = functi
               coef.table <- append(coef.table, round(z@rho,5))
               coef.table <- append(coef.table, round(z@sigma,5))
               coef.table <- matrix(coef.table, , ncol=1) 
-              rownames(coef.table) <- append(colnames(z@regressors),c("rho","sigma"))
+              
+              #rownames(coef.table) <- append(colnames(z@regressors),c("rho","sigma"))
               # z=score
               z_val_table <- coef.table[,1]/z@seCoefficients  # z-score endogenous variable
               # p-values
-              pval <- 2*pt(q=(-abs(z_val_table)), df=(length(z@regressors[,1])-1))  
+              pval <- 2*stats::pt(q=(-abs(z_val_table)), df=(length(z@regressors[,1])-1))  
               rownames(z@seCoefficients) <- NULL    # remove the row names not to appear twice
               colnames(z@seCoefficients) <- NULL    # remove the row names not to appear twice
               coef.table <- cbind(coef.table,round(z@seCoefficients,5))
+              #if (mcl$intercept==TRUE){
               rownames(coef.table) <- append(colnames(z@regressors),c("rho","sigma"))
+              #} else {
+              #  rownames(coef.table) <- append(colnames(z@regressors),c("rho","sigma"))
+              #}
               coef.table <- cbind(coef.table, round(z_val_table,3))
               coef.table <- cbind(coef.table, round(pval,3))
               # rownames(coef.table) <- colnames(z@regressors)
@@ -113,21 +126,33 @@ setMethod(f = "summary", signature= c(object="copulaREndo"), definition = functi
                       z_val_table <- z@coefficients/z@seCoefficients  # z-score endogenous variable
                       coef.table <- cbind(coef.table, round(z_val_table,3))
                       # p-values
-                      pval <- 2*pt(q=(-abs(z_val_table)), df=(length(z@regressors[,1])-1))  
+                      pval <- 2*stats::pt(q=(-abs(z_val_table)), df=(length(z@regressors[,1])-1))  
                       coef.table <- cbind(coef.table, round(pval,3))
-                      rownames(coef.table) <- colnames(z@regressors)
+                      if (mcl$intercept==TRUE){
+                       rownames(coef.table) <- append(c("Intercept"),colnames(z@regressors))
+                      } else{ 
+                        rownames(coef.table) <- colnames(z@regressors)
+                      }
                       colnames(coef.table) <- c("Estimate","Std. Error", "z-score", "Pr(>|z|)")
                       cat("\nCall:\n")
                       print(z@copCall)
                       cat("\nCoefficients:\n")
                       printCoefmat(coef.table)
+                      cat("Residual standard error: ",z@stats$residSE, "on", z@stats$df[2],"degrees of freedom \n")
+                      cat("Multiple R-squared: ",z@stats$r2, " Adjusted R-squared: ", z@stats$adjr2,"\n")
+                      pval_fstats <- pf(length(z@regressors[,1]), as.numeric(z@stats$fstat[2]), as.numeric(z@stats$fstat[3]), lower.tail=F)  # compute pvalue for Fstat
+                      cat("F-statistic: ",z@stats$fstat[1], "on", z@stats$df[1], "and",  z@stats$df[2], "degrees of freedom,", "p-value: ", pval_fstats,"\n")
                     } else 
                        if ("discrete" %in% mcl$type){
                               z <- object
                               est <- z@coefficients  # coef. estimates 
                               coef.table <- round(est,5)
                               coef.table <- cbind(coef.table, round(z@confint,3)) 
-                              rownames(coef.table) <- colnames(z@regressors)
+                              if (mcl$intercept==TRUE){
+                                rownames(coef.table) <- append(c("Intercept"),colnames(z@regressors))
+                              } else{
+                                rownames(coef.table) <- colnames(z@regressors)
+                              }
                               colnames(coef.table) <- c("Estimate","Low_95%CI","Up_95%CI")
                               cat("\nCall:\n")
                               print(z@copCall)

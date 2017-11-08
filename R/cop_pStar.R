@@ -15,6 +15,7 @@
 #'@import stats
 copulaPStar <- function(P){
 	
+  
 	H.p <- stats::ecdf(P)
 
 	H.p <- H.p(P)

@@ -141,6 +141,7 @@ lewbel.est <-
   function(formula, data, clustervar = NULL, robust = TRUE){
     
     # remove missing data
+  
     mns <- unlist(strsplit(as.character(formula)[c(2,3)],"\\|"))  
     if(length(mns)<4){
       stop("Error in formula")

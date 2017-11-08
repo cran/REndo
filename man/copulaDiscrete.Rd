@@ -4,19 +4,18 @@
 \alias{copulaDiscrete}
 \title{Fitting Linear Models with Endogeneous Discrete Regressors using Internal Instrumental Variables}
 \usage{
-copulaDiscrete(y, X, P, intercept = NULL, data = NULL)
+copulaDiscrete(formula, endoVar, intercept = NULL, data)
 }
 \arguments{
-\item{y}{vector containing the dependent variable.}
+\item{formula}{the model formula, e.g. \code{y ~ X1 + X2 + P}.}
 
-\item{X}{matrix containing the regressors, with the endogenous variables occupying the last columns.}
+\item{endoVar}{a string with the name of the endogenous variable/s, in quotation marks.}
 
-\item{P}{matrix containing the discrete endogeneous regressors.}
+\item{intercept}{an optional parameter. The model is estimated by default with 
+intercept. If no intercept is desired or the regressors matrix \code{X} contains already
+a column of ones, intercept should be given the value "FALSE", otherwise the value "TRUE".}
 
-\item{intercept}{the intercept of the model. It should be specified whether the model should be estimated with or without intercept. 
-If no intercept is desired, intercept should be given the value "FALSE", otherwise the value "TRUE".}
-
-\item{data}{optional matrix or data frame containing the dataset used.}
+\item{data}{a data frame or matrix containing the variables of the model.}
 }
 \value{
 Returns an object of class "lm".

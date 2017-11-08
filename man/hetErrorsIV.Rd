@@ -7,9 +7,9 @@
 hetErrorsIV(formula, data, clustervar = NULL, robust = TRUE)
 }
 \arguments{
-\item{formula}{an object of class \code{formula}.}
+\item{formula}{the model formula, e.g.\code{y ~ X1 + X2 + P}.}
 
-\item{data}{the data frame containing these data. This argument is mandatory.}
+\item{data}{the data frame containing the dataset. This argument is mandatory.}
 
 \item{clustervar}{a character value naming the cluster on which to adjust the standard errors and test statistics.}
 
@@ -42,10 +42,9 @@ In cases where there is more than one endogenous regressor the Angrist-Pischke (
 first-stage F-statistics is employed.
 }
 \examples{
-data(dataHigherMoments)
-dataHetIV <- as.data.frame(dataHigherMoments)
-hIV <- hetErrorsIV(y ~ P| X1 + X2 | X1 + X2, data = dataHetIV)
-summary(hIV)
+data(dataHetIV)
+resultsHetIV <- hetErrorsIV(y ~ P| X1 + X2 | X1 + X2, data = dataHetIV)
+summary(resultsHetIV)
 }
 \references{
 Lewbel, A. (2012). Using Heteroskedasticity to Identify and Estimate Mismeasured and Endogenous Regressor Models,\emph{Journal of Business \& Economic Statistics}, \bold{30(1)}, 67-80.

@@ -26,6 +26,8 @@ This class is used to store and further analyze the results of the copulaCorrect
 
 \item{\code{fitted.values}}{- fitted values.}
 
+\item{\code{stats}}{- model fit statistics such as R2, Adj-R2, Fstatistic.}
+
 \item{\code{rho}}{- the estimate of the correlation between the endogenous variable and the error.}
 
 \item{\code{sigma}}{- standard deviation of the error.}

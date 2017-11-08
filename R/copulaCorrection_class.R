@@ -8,6 +8,7 @@
 #' @slot seCoefficients - standard errors of the coefficients.
 #' @slot residuals - the residuals.
 #' @slot fitted.values - fitted values.
+#' @slot stats - model fit statistics such as R2, Adj-R2, Fstatistic.
 #' @slot rho - the estimate of the correlation between the endogenous variable and the error.
 #' @slot sigma - standard deviation of the error.
 #' @slot logLik - value of the maximum likelihood.
@@ -42,6 +43,7 @@ setClass(
     seCoefficients = "matrix",
     residuals = "matrix",
     fitted.values = "matrix",
+    stats = "list",
     rho = "numeric",
     sigma = "numeric",
     logLik = "numeric",
@@ -62,6 +64,7 @@ setClass(
                    seCoefficients = matrix(NA),
                    residuals = matrix(NA),
                    fitted.values = matrix(NA),
+                   stats = list(NA),
                    rho = NA_real_,
                    sigma = NA_real_,
                    param = NA_real_,

@@ -12,13 +12,15 @@ defines the slots of class mixedREndo.
 \describe{
 \item{\code{coefficients}}{- the estimated coefficients.}
 
-\item{\code{coefSdErr}}{- stabdard errors of the estimates.}
+\item{\code{coefSdErr}}{- standard errors of the estimates.}
 
-\item{\code{formula}}{- the formula used for estimation.}
+\item{\code{mixedCall}}{- function call.}
 
 \item{\code{vcovMat}}{- variance-covariance matrix.}
 
 \item{\code{weightMat}}{- the weight matrix used for estimation.}
+
+\item{\code{omittedVarTest}}{- Omitted Variable Test statistic and p-value.}
 }}
 
 \examples{

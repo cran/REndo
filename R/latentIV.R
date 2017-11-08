@@ -71,8 +71,10 @@
 #' l  <- latentIV(y ~ P, data = dataLatentIV)
 #' summary(l)
 #' # function call with initial parameter values given by the user
+#' \dontrun{
 #' l1 <- latentIV(y ~ P, c(2.9,-0.85,0,0.1,1,1,1,0.5), data = dataLatentIV)
 #' summary(l1)
+#' }
 # make availble to the package users
 #'@export
 #@import methods

@@ -4,11 +4,10 @@
 #'@description  Fits linear models with continuous or discrete endogeneous regressors using Gaussian copulas, method presented in Park and Gupta (2012).
 #'This is a statistical technique to address the endogeneity problem, where no external instrumental variables are needed. The important assumption of the model is 
 #'that the endogeneous variables should NOT be normally distributed.
-#'@usage copulaCorrection(y,X,P,param,type, method, intercept, data)
+#'@usage copulaCorrection(formula, endoVar, param, type, method, intercept, data)
 # Arguments
-#'@param  y  the vector or matrix containing the dependent variable. 
-#'@param  X  the data frame or matrix containing the regressors of the model, both \emph{exogeneous and endogeneous}. The \emph{last column/s should contain the endogenous variable/s}.
-#'@param  P  the matrix.vector containing the endogenous variables.
+#'@param  formula  the model formula, e.g. \code{y ~ X1 + X2 + X3}.
+#'@param  endoVar  a string with the name/s of the endogenous variables.
 #'@param  param  the vector of initial values for the parameters of the model to be supplied to the optimization algorithm. The parameters to be estimated are \code{theta = \{b,a,rho,sigma\}}, where
 #' \code{b} are the parameters of the exogenous variables, \code{a} is the parameter of the endogenous variable, \code{rho} is the parameter for the correlation between the error and the endogenous regressor, while 
 #' \code{sigma} is the standard deviation of the structural error.
@@ -17,8 +16,7 @@
 #'and "2" is the equivalent OLS approach described in the same paper. "1" can be applied when there is just a single, continous endogenous variable. 
 #'With one discrete or more than one continuous endogenous regressors, the second method is applied by default.
 #'@param  intercept  optional parameter. The model is estimated by default with 
-#'intercept. If no intercept is desired or the regressors matrix \code{X} contains already
-#'a column of ones, intercept should be given the value "no".  
+#'intercept. If no intercept is desired in the model estimation, intercept should be given the value "FALSE".  
 #'@param data  data frame or matrix containing the variables of the model.
 
 #'@details The maximum likelihood estimation is performed by the "BFGS" algorithm. When there are two endogenous regressors, there is no need for initial parameters since the method applied is by default the augmented OLS, which
@@ -41,48 +39,49 @@
 #'#load dataset dataCopC1, where P is endogenous, continuous and not normally distributed
 #'
 #'data(dataCopC1)
-#'y <- dataCopC1[,1]
-#'X <- dataCopC1[,2:5]
-#'P <- dataCopC1[,5]
 #'\dontrun{
-#'c1 <- copulaCorrection(y, X, P, type = "continuous", method = "1", intercept=FALSE)
+#'
+#'c1 <- copulaCorrection(formula = y ~ X1 + X2 + P, endoVar ="P", type = "continuous", method = "1",
+#' intercept=TRUE, data=dataCopC1)
 #'summary(c1)
 #'}
 #'
 #'# an alternative model can be obtained using "method ="2"".
-#'c12 <- copulaCorrection(y, X, P, type = "continuous", method = "2", intercept=FALSE)
+#'\dontrun{
+#'c12 <- copulaCorrection(formula = y ~ X1 + X2 + P, endoVar = "P", type = "continuous", method = "2",
+#' intercept=TRUE, data = dataCopC1)
 #'summary(c12)
-#'
+#'}
 #'# with 2 endogeneous regressors no initial parameters are needed, the default is the augmented OLS.
 #'data(dataCopC2)
-#'y <- dataCopC2[,1]
-#'X <- dataCopC2[,2:6]
-#'P <- dataCopC2[,5:6]
-#'c2 <- copulaCorrection(y, X, P, type = "continuous" ,method="2", intercept=FALSE)
+#'c2 <- copulaCorrection(formula = y ~ X1 + X2 + P1 + P2, endoVar = c("P1","P2"), 
+#'type = "continuous", method="2", intercept=TRUE, data=dataCopC2)
 #'summary(c2)
 #'
 #'# load dataset with 1 discrete endogeneous variable. 
 #'# having more than 1 discrete endogenous regressor is also possible
 #' data(dataCopDis)
-#' y <- dataCopDis[,1]
-#' X <- dataCopDis[,2:5]
-#' P <- dataCopDis[,5]
-#' c3 <- copulaCorrection(y, X, P, type = "discrete", intercept=FALSE, data = dataCopDis)
+#' c3 <- copulaCorrection(formula = y ~ X1 + X2 + P, endoVar = "P", type = "discrete", 
+#' intercept=TRUE, data = dataCopDis)
 #' summary(c3)
 #'@export
 
 
-copulaCorrection <- function(y,X,P,param=NULL,type=NULL,method=NULL, intercept = NULL, data = NULL){
+copulaCorrection <- function(formula,endoVar,param=NULL,type=NULL,method=NULL, intercept = NULL, data){
 
   mcl <- match.call()  
+  mf <- model.frame(formula = formula, data = data)
+  y <- mf[,1]
+
+ 
   obj <- methods::new("copulaREndo")
   if ("continuous" %in% mcl$type){ 
          if ("1" %in% mcl$method )
         {   
               print("Attention! The endogeneous regressor should be continuous and NOT normally distributed")
             
-              cC1 <- copulaCont1(y,X,P,param, intercept, data)
-              seC1 <- boots(10, y, X, P, cC1$param, intercept, data)    # run bottstrap for SE
+              cC1 <- copulaCont1(formula, endoVar,param, intercept, data)
+              seC1 <- boots(10, formula, endoVar, cC1$param, intercept, data=data)    # run bootstrap for SE
               k <- cC1$k    # position of the endogenous regressor - always on the last column of X
               k1 <- cC1$k1    # k1=k+2
               obj@coefEndoVar  <- cC1$coef_cop[,k]
@@ -96,27 +95,25 @@ copulaCorrection <- function(y,X,P,param=NULL,type=NULL,method=NULL, intercept =
               obj@BIC <- (-2)*(obj@logLik) + length(y)*length(cC1$param)
               obj@convCode <- cC1$coef_cop[,"convcode"]
               obj@regressors <- cC1$reg
-              obj@fitted.values <- t(as.matrix(as.numeric(cC1$coef_cop[,1:k]))) %*% t(X) 
+              obj@fitted.values <- as.numeric(cC1$coef_cop[,1:k]) * cC1$reg 
               obj@residuals <- as.matrix(y-obj@fitted.values)
               obj@copCall <- mcl
-             
-            
+              
          } else 
              if ("2" %in% mcl$method) {
-               cC2 <- copulaMethod2(y,X,P,intercept) 
+               cC2 <- copulaMethod2(formula,endoVar,intercept,data) 
                obj@coefficients <- round(cC2$f$coefficients,5)
                obj@seCoefficients <- as.matrix(summary(cC2$f)$coefficients[,2])
-               obj@regressors <- cC2$reg
+               obj@regressors <- as.matrix(cC2$reg)
                obj@copCall <- mcl
                obj@residuals <- as.matrix(as.numeric(cC2$resid))
                obj@fitted.values <- as.matrix(cC2$fitted.values)
-          
-             
-               }
+               obj@stats <- cC2$stats
+          }
   } else
    if ("discrete" %in% mcl$type) {
   
-     cD <- copulaDiscrete(y,X,P,intercept, data)
+     cD <- copulaDiscrete(formula, endoVar,intercept, data)
      obj@coefficients  <- cD$coefficients
      obj@residuals <- as.matrix(as.numeric(cD$resid))
      obj@fitted.values <- as.matrix(cD$fitted.values)

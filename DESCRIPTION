@@ -2,8 +2,8 @@ Package: REndo
 Type: Package
 Title: Fitting Linear Models with Endogenous Regressors using Latent
         Instrumental Variables
-Version: 1.2
-Date: 2017-03-28
+Version: 1.3
+Date: 2017-11-08
 Author: Raluca Gui,
     Markus Meierer,
     Rene Algesheimer
@@ -17,25 +17,16 @@ Description: Fits linear models with endogenous regressor using latent
     These are statistical techniques to address the endogeneity problem where no
     external instrumental variables are needed.
     This version: 
-       - solves an error occurring when using the multilevelIV() function with two levels, random intercept. 
-       - returns the AIC and BIC for copulaCorrection() (method 1) and latentIV() methods.
-       - residuals and fitted values can be saved by users for latentIV() and copulaCorrection() methods.
-       - improves the summary methods for copulaCorrection() and multilevelIV() functions.
+       - includes an omitted variable test in the multilevel estimation. It is reported in the summary() function of the 
+         multilevelIV() function.
+       - resolves the error "Error in listIDs[, 1] : incorrect number of dimensions" when using the multilevelIV() function.
+       - a new simulated dataset is provided, dataMultilevelIV, on which to exemplify the multilevelIV() function.
 Imports: optimx, mvtnorm, AER, e1071, stats, corpcor, lme4, gmm,
-        lmtest, plyr, sandwich, Matrix
+        lmtest, plyr, sandwich, compiler, data.table, Matrix
 Depends: methods
 License: GPL-3
 RoxygenNote: 6.0.1
-Collate: 'checkAssumptions.R' 'cop_Cont1.R' 'cop_Cont2.R'
-        'cop_Discrete.R' 'cop_bootsSE.R' 'cop_logLik.R' 'cop_pStar.R'
-        'copulaCorrection.R' 'copulaCorrection_class.R'
-        'f_hetErrorsIV.R' 'f_multilevelGMM.R' 'hetErrorsIV.R'
-        'hetErrorsIV_class.R' 'higherMomentsIV.R' 'internalIV.R'
-        'latentIV.R' 'latentIV_class.R' 'latentIV_loglik.R'
-        'methods_copulaCorrection.R' 'methods_hetErrorsIV.R'
-        'methods_latentIV.R' 'methods_multilevelIV.R' 'multilevelIV.R'
-        'mixedGMM.R' 'multilevelIV_class.R' 'tScores.R'
 NeedsCompilation: no
-Packaged: 2017-04-10 14:10:18 UTC; raluca
+Packaged: 2017-11-08 14:27:47 UTC; raluca
 Repository: CRAN
-Date/Publication: 2017-04-10 14:33:46 UTC
+Date/Publication: 2017-11-08 16:59:09 UTC

@@ -12,8 +12,8 @@ setMethod(f = "coef", signature= c(object="mixedREndo"), definition=function(obj
             
             z <- object
             coef.table <- z@coefficients
-            return(coef.table)
-       
+            print(coef.table)
+        
      }
 )
 
@@ -27,32 +27,54 @@ setMethod(f = "coef", signature= c(object="mixedREndo"), definition=function(obj
 #' @aliases summary, ANY-method
 #' @aliases summary, mixedREndo-method
 #' @keywords internal
-setMethod(f = "summary", signature= c(object="mixedREndo"), definition=function(object, model){
-  
-            z <- object
-            mcl <- match.call()  
-            if ("bFE_L2" %in% mcl$model){
-              ans <- list(Formula = z@formula, Coefficients = z@coefSdErr$bFE_Lev2) 
-            }
-          #  ans <- list(Formula = z@formula, Coefficients = z@coefSdErr)  # estimates and their sd.errors and z-scores
-            if ("bFE_L3" %in% mcl$model){
-              ans <- list(Formula = z@formula, Coefficients = z@coefSdErr$bFE_Lev3) 
-            } 
+setMethod(f = "summary", signature= c(object="mixedREndo"), definition=function(object, model=NULL){
+ 
+             z <- object
+             mcl <- match.call() 
+             
+             # if a model is not provided, print all
+            if (is.null(mcl$model)) { 
+              ans <- z@coefSdErr 
+              cat("\nCall:\n")
+              print(z@mixedCall)
+              coef.table <- z@coefficients
+              print(coef.table)
+              } else {
             
-            if ("bGMM_L2" %in% mcl$model){
-              ans <- list(Formula = z@formula, Coefficients = z@coefSdErr$bGMM_Lev2) 
+             if ("REF" %in% mcl$model){
+               ans <-  z@coefSdErr$REF 
+               OmittedVarTest <- z@omittedVarTest$REF 
+             }
+             if ("GMM_L3" %in% mcl$model){
+               ans <- z@coefSdErr$GMM_L3 
+               OmittedVarTest <- z@omittedVarTest$GMM_L3
+             }
+             if ("GMM_L2" %in% mcl$model){
+               ans <- z@coefSdErr$GMM_L2 
+               OmittedVarTest <- z@omittedVarTest$GMM_L2
+             }
+             if ("FE_L3" %in% mcl$model){
+               ans <-  z@coefSdErr$FE_L3
+               OmittedVarTest <- z@omittedVarTest$FE_L3
+             } 
+             if ("FE_L2" %in% mcl$model){
+              ans <-  z@coefSdErr$FE_L2
+              OmittedVarTest <- z@omittedVarTest$FE_L2
+              }
+          
+            cat("\nCall:\n")
+            print(z@mixedCall)
+            cat("\nCoefficients:\n")
+            print(ans)
+            cat("\n")
+            cat("Omitted variable test:\n") 
+            cat("\n")
+            print(OmittedVarTest) 
+            cat("\n alternative hypothesis: one model is inconsistent")
+            #return(OmittedVarTest)  
             }
-            if ("bGMM_L3" %in% mcl$model){
-              ans <- list(Formula = z@formula, Coefficients = z@coefSdErr$bGMM_Lev3) 
-            }
-            if ("bRE" %in% mcl$model){
-              ans <- list(Formula = z@formula, Coefficients = z@coefSdErr$b_REF ) 
-            }
-            if ("all" %in% mcl$model){
-              ans <- list(Formula = z@formula, Coefficients = z@coefSdErr ) 
-            }
-            return(ans)
-            
-}
+}  
 )
 
+
+  

@@ -6,7 +6,7 @@
 \alias{summary-methods}
 \title{methods for the multilevelIV function}
 \usage{
-\S4method{summary}{mixedREndo}(object, model)
+\S4method{summary}{mixedREndo}(object, model = NULL)
 }
 \arguments{
 \item{object}{object of class multilevelIV}
