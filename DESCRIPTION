@@ -1,8 +1,8 @@
 Package: REndo
 Title: Fitting Linear Models with Endogenous Regressors using Latent
         Instrumental Variables
-Version: 2.3.0
-Date: 2019-08-04
+Version: 2.3.1
+Date: 2020-02-15
 Authors@R: c(
     person(given="Raluca", family="Gui",         email = "raluca.gui@business.uzh.ch", role = c("cre","aut")),
     person(given="Markus", family="Meierer",     email = "markus.meierer@business.uzh.ch", role = "aut"),
@@ -26,13 +26,13 @@ Imports: methods (>= 3.4), stats (>= 3.4), utils (>= 3.4), Formula (>=
         corpcor (>= 1.6.9)
 Suggests: testthat, covr, R.rsp
 Encoding: UTF-8
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: R.rsp
-Packaged: 2019-08-05 15:08:54 UTC; patrik
+Packaged: 2020-02-16 23:13:05 UTC; patrik
 Author: Raluca Gui [cre, aut],
   Markus Meierer [aut],
   Rene Algesheimer [aut],
   Patrik Schilter [aut]
 Maintainer: Raluca Gui <raluca.gui@business.uzh.ch>
 Repository: CRAN
-Date/Publication: 2019-08-05 16:00:02 UTC
+Date/Publication: 2020-02-17 15:50:02 UTC
