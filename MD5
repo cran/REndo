@@ -1,6 +1,6 @@
-fce5f4da477894dc21ca514575336dae *DESCRIPTION
-607763ad46dd8f9674933a9f7df37f6f *NAMESPACE
-cd8e87a2e84483ef6b01aac4f388c40a *NEWS.md
+8562c2f4be34fdbc13f82e9996a3305b *DESCRIPTION
+74ae9c68aa6e06dfa262cb8cbd338320 *NAMESPACE
+37b76e896d2703b8db290eb30ead9a6a *NEWS.md
 1ff466bccac0b527ea90238b7039ee9f *R/REndo-package.R
 8160a68e33d4b1744d6f12c6b3e5d51d *R/RcppExports.R
 d6c96953af947445f7603cb93abf495d *R/data.R
@@ -10,10 +10,9 @@ d6c96953af947445f7603cb93abf495d *R/data.R
 068325617b721af8252bdf2f4c8c3678 *R/f_checkinput_highermomentsiv.R
 2fd8701234aeff43bd525520ca2095f2 *R/f_checkinput_latentIV.R
 fb444151510738bb7df39980813acc73 *R/f_checkinput_multilevel.R
-bcb85ad3254f7a6469df18baa052b133 *R/f_copulacorrection_LL.R
 7523ba232408a2f9af193f71207ba6d6 *R/f_copulacorrection_interface.R
 4c3f4e17e353db6531643319b11aa542 *R/f_copulacorrection_linearmodel.R
-a3d820773e541add367ec99fd7fdd7eb *R/f_copulacorrection_optimizeLL.R
+3594a3e9a84b727b092a0d0e5fa6a82c *R/f_copulacorrection_optimizeLL.R
 aa1e105ab0a4615333882d96e41472e0 *R/f_copulacorrectionpstar_continuous.R
 5f525f1e73922aa2aafc754f04e70597 *R/f_copulacorrectionpstar_discrete.R
 3077763b323ea55046470e7c4ac7b20c *R/f_formula_helpers.R
@@ -80,8 +79,8 @@ d91d231ac924d90fdfa064a61ade775a *man/summary.rendo.latent.IV.Rd
 e6691857f6d650751576aa3e60d0841f *man/vcov.rendo.boots.Rd
 236ff7518dcacf1f5fa87b98a18d1d4e *src/Makevars
 236ff7518dcacf1f5fa87b98a18d1d4e *src/Makevars.win
-d8102c66713fd47fadcdcde33bf86738 *src/RcppExports.cpp
-2fce6b7fdc24f654561e31c9a60853e0 *src/f_copulacorrection_LL_rcpp.cpp
+a6b001a02d076cb40322623e58faaf52 *src/RcppExports.cpp
+6c8225540ae3f2e04dc042a3e3beca7f *src/f_copulacorrection_LL_rcpp.cpp
 28fec4d88c9eb3e536d606c3b4fb43fa *tests/testthat.R
 b141b9c75bdb7fabd4cd6311d9ea2f71 *tests/testthat/dallas2485.csv
 3b7821b39df5db31ec1f4901d1c2f912 *tests/testthat/helper_test_confint.R
