@@ -1,6 +1,6 @@
-8562c2f4be34fdbc13f82e9996a3305b *DESCRIPTION
+bd8247a21046d352f10bac65fa03d4a7 *DESCRIPTION
 74ae9c68aa6e06dfa262cb8cbd338320 *NAMESPACE
-37b76e896d2703b8db290eb30ead9a6a *NEWS.md
+bd6fabc29fe7353f6ae0362d5a4ef3ed *NEWS.md
 1ff466bccac0b527ea90238b7039ee9f *R/REndo-package.R
 8160a68e33d4b1744d6f12c6b3e5d51d *R/RcppExports.R
 d6c96953af947445f7603cb93abf495d *R/data.R
@@ -23,11 +23,11 @@ e36ad5e9b30bfcd1f414ec47f1bf251b *R/f_highermomentsIV_IIV.R
 cd46fedf14cf9ae58d934a945869c735 *R/f_latentIV.R
 63a5103d355e895ee6d4d6509eba7d10 *R/f_latentIV_LL.R
 46d982fb6935b3b189b72c1790994531 *R/f_multilevelIV.R
-9abba27992d509efbd8e503aabbe7ad2 *R/f_multilevel_2levels.R
-0236c2831b419897c8045a47e404a457 *R/f_multilevel_3levels.R
+950cceaeab21adad5803d185b1d43a82 *R/f_multilevel_2levels.R
+f36b5fa5e941ed8fcbb4438010a0c44b *R/f_multilevel_3levels.R
 628e9795d5dd493d9e58e9b5377275e3 *R/f_multilevel_gmmestim.R
 a7be056f49a0e5ab98c0705d7cda7774 *R/f_multilevel_helpers.R
-3bd405434662d701b02cd0ebbf9ace54 *R/f_multilevel_omittedvar.R
+f21e8c5926ba573db218215603adbd3a *R/f_multilevel_omittedvar.R
 d97fba7626e31eebd64faa403a1f4941 *R/f_new_copulacorrection.R
 da06b6366e6e392302eeef69fa1be4c1 *R/f_new_multilevel.R
 f776ccf58c88747ff17e293a2ce9bd3f *R/f_new_rendobase.R
@@ -41,7 +41,7 @@ ad430d30e99a14be8c050a004979288d *R/f_s3_rendobase.R
 7f712154a1318f2fa58bdeff373a7719 *R/f_s3_rendoivreg.R
 7c938dc06f0aafcdd568c9b797f3ab7b *R/f_s3_rendolatentIV.R
 3320a24cd57c7732c66e430eefe330e5 *README.md
-d03b3e370106b7df5a95825f7639b7d4 *build/vignette.rds
+db8e946dcf67beae45bec876a0df0404 *build/vignette.rds
 991eeae4b55523decbe9e1f9aedaf2d8 *data/dataCopCont.rda
 fdbaf8c09d9245d45f1830659cde5aef *data/dataCopCont2.rda
 a2f7d5fd6be7edf5fe7fa8cee133bba9 *data/dataCopDis.rda
@@ -79,7 +79,7 @@ d91d231ac924d90fdfa064a61ade775a *man/summary.rendo.latent.IV.Rd
 e6691857f6d650751576aa3e60d0841f *man/vcov.rendo.boots.Rd
 236ff7518dcacf1f5fa87b98a18d1d4e *src/Makevars
 236ff7518dcacf1f5fa87b98a18d1d4e *src/Makevars.win
-a6b001a02d076cb40322623e58faaf52 *src/RcppExports.cpp
+40b415eb1b5f40d27534eab22b407ba8 *src/RcppExports.cpp
 6c8225540ae3f2e04dc042a3e3beca7f *src/f_copulacorrection_LL_rcpp.cpp
 28fec4d88c9eb3e536d606c3b4fb43fa *tests/testthat.R
 b141b9c75bdb7fabd4cd6311d9ea2f71 *tests/testthat/dallas2485.csv
@@ -92,6 +92,7 @@ b7f241c4dd14f0cbcd8cc84b6e236401 *tests/testthat/helper_test_s3methods.R
 f2c1a5de3b78ad15c083379f23b4779c *tests/testthat/helper_test_s3methods_rendobase.R
 e97b4a94182be12e9107d4ccc9a4a38b *tests/testthat/helper_test_s3methods_rendoboots.R
 1df2fdc2645203a284a303533e4d159b *tests/testthat/helper_test_singlelogical.R
+2af5a643a765345887a6e7bab5eb07ba *tests/testthat/pinson06_rankdeficient_samesizegroup.csv
 625f0a72546ac82d4abd6b804988e9e4 *tests/testthat/test-correctness_copulacorrections.R
 7baf121d46746bef0874d0458f28dd21 *tests/testthat/test-correctness_heterrors.R
 b78edd125735fad9dec2413567d8b2a3 *tests/testthat/test-correctness_highermoments.R
@@ -106,7 +107,7 @@ ac5b4e7cd0c3ce147b51b0a010a5597d *tests/testthat/test-runability_copulacorrectio
 3673c576b6f67780406a4d87a304bae6 *tests/testthat/test-runability_heterrorsIV.R
 740a79c97f23e76654accf93d39921bf *tests/testthat/test-runability_highermomentsIV.R
 b6e7d1ea900e66a5df9ceca55787aeaf *tests/testthat/test-runability_latentIV.R
-fc39976eeef7bbc138206452611cb25d *tests/testthat/test-runability_multilevel.R
+34c0ac2a4a7b27849d4a32e4d0ac1207 *tests/testthat/test-runability_multilevel.R
 232a3e45bded34051b3d9b78e1e6d8f8 *tests/testthat/test-s3methods_copualcorrection.R
 6444aa6fda97681bc9c72ba9e4ca00ff *tests/testthat/test-s3methods_heterrorsiv.R
 01cc7d2f41f1c21025e5b9a9c12e5195 *tests/testthat/test-s3methods_higherMoments.R
