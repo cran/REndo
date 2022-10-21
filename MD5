@@ -1,6 +1,6 @@
-956631422eaa8aa76d0fc97ee11e3c9b *DESCRIPTION
+e4254012d7417ed5c5ff47b6922c7261 *DESCRIPTION
 74ae9c68aa6e06dfa262cb8cbd338320 *NAMESPACE
-a79f282a0f772ce7559f2283cbe4fe90 *NEWS.md
+5dbdd6b874bdd14b89f29d328232efd5 *NEWS.md
 1ff466bccac0b527ea90238b7039ee9f *R/REndo-package.R
 8160a68e33d4b1744d6f12c6b3e5d51d *R/RcppExports.R
 b615ed3e1e97e2bb460a9b9600fdb0e9 *R/data.R
@@ -22,7 +22,7 @@ bf0aa05d8c037bd00c071e3240ceea35 *R/f_heterrorsIV_IIV.R
 e36ad5e9b30bfcd1f414ec47f1bf251b *R/f_highermomentsIV_IIV.R
 1744388095788c2d4e7f0c7f9aafdd3f *R/f_latentIV.R
 63a5103d355e895ee6d4d6509eba7d10 *R/f_latentIV_LL.R
-95a766a70292b7fe725b50651a62bd43 *R/f_multilevelIV.R
+6dc8e0cb413b832ad0c6b37c77b63fd1 *R/f_multilevelIV.R
 950cceaeab21adad5803d185b1d43a82 *R/f_multilevel_2levels.R
 f36b5fa5e941ed8fcbb4438010a0c44b *R/f_multilevel_3levels.R
 628e9795d5dd493d9e58e9b5377275e3 *R/f_multilevel_gmmestim.R
@@ -102,7 +102,7 @@ a923e3dec1efe42626e87ca449e0d603 *tests/testthat/test-inputchecks_copulacorrecti
 28a700895a50655ad0b3acd7e42076a5 *tests/testthat/test-inputchecks_heterrorsIV.R
 de9ea35c7dbe4ff5e738bea53c5163e0 *tests/testthat/test-inputchecks_highermomentsiv.R
 914e6c6547b9dc777db7325c21d6f386 *tests/testthat/test-inputchecks_latentIV.R
-8e61db59d0041760e2d572726d21dcf5 *tests/testthat/test-inputchecks_multilevel.R
+454651e86444a33c5e2ab586b985368d *tests/testthat/test-inputchecks_multilevel.R
 ac5b4e7cd0c3ce147b51b0a010a5597d *tests/testthat/test-runability_copulacorrection.R
 266c6d7d80fb70a01e99cf02059aa1aa *tests/testthat/test-runability_heterrorsIV.R
 740a79c97f23e76654accf93d39921bf *tests/testthat/test-runability_highermomentsIV.R
