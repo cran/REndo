@@ -1,6 +1,6 @@
-e4254012d7417ed5c5ff47b6922c7261 *DESCRIPTION
+4f899b8b86c39273fb65cbf940dd3fd5 *DESCRIPTION
 74ae9c68aa6e06dfa262cb8cbd338320 *NAMESPACE
-5dbdd6b874bdd14b89f29d328232efd5 *NEWS.md
+1dd4bf25ba168bc75c377cc551b137ae *NEWS.md
 1ff466bccac0b527ea90238b7039ee9f *R/REndo-package.R
 8160a68e33d4b1744d6f12c6b3e5d51d *R/RcppExports.R
 b615ed3e1e97e2bb460a9b9600fdb0e9 *R/data.R
@@ -46,7 +46,7 @@ ad430d30e99a14be8c050a004979288d *R/f_s3_rendobase.R
 fdbaf8c09d9245d45f1830659cde5aef *data/dataCopCont2.rda
 1c187a62032b2fd342291b3e77a1e3e6 *data/dataCopDis.rda
 5564e8b90ccb47c5a98ff55d79d9572e *data/dataCopDis2.rda
-89f898220c431d6fcb3c27a430b85779 *data/dataCopDisCont.rda
+efc598c73afddad6cb137d413db044c8 *data/dataCopDisCont.rda
 d7d741a300164a80748c57e12968e87c *data/dataHetIV.rda
 8d9fc3b1467d73c81d6db9a2273d0ae5 *data/dataHigherMoments.rda
 cf129eb0a5c9a3801237f2107081d783 *data/dataLatentIV.rda
@@ -97,7 +97,7 @@ e97b4a94182be12e9107d4ccc9a4a38b *tests/testthat/helper_test_s3methods_rendoboot
 7baf121d46746bef0874d0458f28dd21 *tests/testthat/test-correctness_heterrors.R
 b78edd125735fad9dec2413567d8b2a3 *tests/testthat/test-correctness_highermoments.R
 10d6d63ba5b3ec9075c5a9a6293c68d0 *tests/testthat/test-correctness_latentIV.R
-56f5764a0132114e9f1b9ca52425e6de *tests/testthat/test-correctness_multilevel.R
+751b5922f9a2f9bcdfa829047c909c9b *tests/testthat/test-correctness_multilevel.R
 a923e3dec1efe42626e87ca449e0d603 *tests/testthat/test-inputchecks_copulacorrection.R
 28a700895a50655ad0b3acd7e42076a5 *tests/testthat/test-inputchecks_heterrorsIV.R
 de9ea35c7dbe4ff5e738bea53c5163e0 *tests/testthat/test-inputchecks_highermomentsiv.R
