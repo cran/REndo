@@ -1,7 +1,7 @@
-4f899b8b86c39273fb65cbf940dd3fd5 *DESCRIPTION
+a6744b8a2ea5f8f011cdcc2bc80b1646 *DESCRIPTION
 74ae9c68aa6e06dfa262cb8cbd338320 *NAMESPACE
-1dd4bf25ba168bc75c377cc551b137ae *NEWS.md
-1ff466bccac0b527ea90238b7039ee9f *R/REndo-package.R
+9178a23f05299347d87bba646949fda2 *NEWS.md
+ea2260a8b2dae4fb791e170bfa155b34 *R/REndo-package.R
 8160a68e33d4b1744d6f12c6b3e5d51d *R/RcppExports.R
 b615ed3e1e97e2bb460a9b9600fdb0e9 *R/data.R
 677305aa5999b1be08c0983e5cbdb3b4 *R/f_checkinput_copulacorrection.R
@@ -40,7 +40,8 @@ ad430d30e99a14be8c050a004979288d *R/f_s3_rendobase.R
 656c1415d82dbcff3857b3476922bf3d *R/f_s3_rendocopulacorrection.R
 7f712154a1318f2fa58bdeff373a7719 *R/f_s3_rendoivreg.R
 7c938dc06f0aafcdd568c9b797f3ab7b *R/f_s3_rendolatentIV.R
-3320a24cd57c7732c66e430eefe330e5 *README.md
+1615dcc353f5119a7811da354dae5b9a *README.md
+1961639f6f4f7f9efffa91b624b3d060 *build/partial.rdb
 52944adc4ac42453fc520c523d0f3590 *build/vignette.rds
 6548bc140d62f6440201bce5da43f00b *data/dataCopCont.rda
 fdbaf8c09d9245d45f1830659cde5aef *data/dataCopCont2.rda
@@ -51,9 +52,10 @@ d7d741a300164a80748c57e12968e87c *data/dataHetIV.rda
 8d9fc3b1467d73c81d6db9a2273d0ae5 *data/dataHigherMoments.rda
 cf129eb0a5c9a3801237f2107081d783 *data/dataLatentIV.rda
 88d10ee74441b09cf706f22637c95d00 *data/dataMultilevelIV.rda
+b8efe8a36da92f9d92c289f6fe0e9a5b *inst/CITATION
 b498b1f6f3da7483ced7fa52fac5de6b *inst/doc/REndo-introduction.pdf
 632c78200b0e5d7d75d9190570468571 *inst/doc/REndo-introduction.pdf.asis
-b108b1220d324dc93b52e4833a387f38 *man/REndo.Rd
+ac1ddf331c259894610080677c181614 *man/REndo.Rd
 d4847570028e0b9716ea979cd1987321 *man/confint.rendo.boots.Rd
 565cc56427cac6f3ba72fb79872873e6 *man/copulaCorrection.Rd
 71765481a5f8baa657c430e54e699ad1 *man/dataCopCont.Rd
