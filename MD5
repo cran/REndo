@@ -1,6 +1,6 @@
-f0c77c0a172f33273676feddb4b08440 *DESCRIPTION
-74ae9c68aa6e06dfa262cb8cbd338320 *NAMESPACE
-df63364307cf5c20f05163250318437c *NEWS.md
+390172667547c833c02965fb1476ae17 *DESCRIPTION
+5b427716a7de3d1eb43a77a170637f73 *NAMESPACE
+9fe5e3974046427d159b73c6ad9d578e *NEWS.md
 ffaeeba8cb4bf6ab795ee2c53127b60a *R/REndo-package.R
 3556a84df6c71e3ff4ef67123f0089de *R/RcppExports.R
 b615ed3e1e97e2bb460a9b9600fdb0e9 *R/data.R
@@ -9,7 +9,7 @@ b615ed3e1e97e2bb460a9b9600fdb0e9 *R/data.R
 75274467e76f188b93b8a231f5a0a3ed *R/f_checkinput_heterrorsIV.R
 068325617b721af8252bdf2f4c8c3678 *R/f_checkinput_highermomentsiv.R
 2fd8701234aeff43bd525520ca2095f2 *R/f_checkinput_latentIV.R
-fb444151510738bb7df39980813acc73 *R/f_checkinput_multilevel.R
+a24341ed46b8d13b2a7e05ed42df8ca9 *R/f_checkinput_multilevel.R
 7c9bb1da2379d3ca56b67f2a7b06c4e5 *R/f_copulacorrection_interface.R
 4c3f4e17e353db6531643319b11aa542 *R/f_copulacorrection_linearmodel.R
 6c655d2371bee756cc9c6ddd2c27592e *R/f_copulacorrection_optimizeLL.R
@@ -22,7 +22,7 @@ bf0aa05d8c037bd00c071e3240ceea35 *R/f_heterrorsIV_IIV.R
 e36ad5e9b30bfcd1f414ec47f1bf251b *R/f_highermomentsIV_IIV.R
 1744388095788c2d4e7f0c7f9aafdd3f *R/f_latentIV.R
 63a5103d355e895ee6d4d6509eba7d10 *R/f_latentIV_LL.R
-6dc8e0cb413b832ad0c6b37c77b63fd1 *R/f_multilevelIV.R
+f9b00ece99748723f698125b8724dfcb *R/f_multilevelIV.R
 950cceaeab21adad5803d185b1d43a82 *R/f_multilevel_2levels.R
 f36b5fa5e941ed8fcbb4438010a0c44b *R/f_multilevel_3levels.R
 628e9795d5dd493d9e58e9b5377275e3 *R/f_multilevel_gmmestim.R
@@ -40,9 +40,9 @@ ad430d30e99a14be8c050a004979288d *R/f_s3_rendobase.R
 656c1415d82dbcff3857b3476922bf3d *R/f_s3_rendocopulacorrection.R
 7f712154a1318f2fa58bdeff373a7719 *R/f_s3_rendoivreg.R
 7c938dc06f0aafcdd568c9b797f3ab7b *R/f_s3_rendolatentIV.R
-1615dcc353f5119a7811da354dae5b9a *README.md
-20c8d3f97d93e2e318a22508275b5a02 *build/partial.rdb
-5b8a83e533330aa05ccd888f704cb39b *build/vignette.rds
+6024c0ee9bcf05c9fe59981727904d62 *README.md
+f51ba7c8bc94d8cf1fd072b85c6e53ab *build/partial.rdb
+1e58c012ea0069c923076c060f2dde36 *build/vignette.rds
 6548bc140d62f6440201bce5da43f00b *data/dataCopCont.rda
 fdbaf8c09d9245d45f1830659cde5aef *data/dataCopCont2.rda
 1c187a62032b2fd342291b3e77a1e3e6 *data/dataCopDis.rda
