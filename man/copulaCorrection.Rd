@@ -11,7 +11,8 @@ copulaCorrection(formula, data, num.boots = 1000, verbose = TRUE, ...)
 
 \item{data}{A data.frame containing the data of all parts specified in the formula parameter.}
 
-\item{num.boots}{Number of bootstrapping iterations. Defaults to 1000.}
+\item{num.boots}{Positive integer giving the number of bootstrap replications
+used for standard error estimation. A minimum of 1000 is recommended.}
 
 \item{verbose}{Show details about the running of the function.}
 
@@ -79,10 +80,10 @@ where \eqn{t=1,..,T} indexes either time or cross-sectional units, \ifelse{html}
 The marginal distribution of the endogenous regressor \ifelse{html}{\out{P<sub>t</sub>}}{\eqn{P_{t}}} is obtained using the Epanechnikov
 kernel density estimator (Epanechnikov, 1969), as below:
 
-\ifelse{html}{\out{<br><div style="text-align:center">h&#770;(p)=1/(T&#183;b) &sum;(K&#183;((p-P<sub>t</sub>)/b))</div>}}{\deqn{\hat{h}(p)=\frac{1}{T\cdot b}\sum_{t=1}^{T}K\left(\frac{p-P_{t}}{b}\right)}}
+\ifelse{html}{\out{<br><div style="text-align:center">&#293;(p)=1/(T&#183;b) &sum;(K&#183;((p-P<sub>t</sub>)/b))</div>}}{\deqn{\hat{h}(p)=\frac{1}{T\cdot b}\sum_{t=1}^{T}K\left(\frac{p-P_{t}}{b}\right)}}
 
 where \ifelse{html}{\out{P<sub>t</sub>}}{\eqn{P_{t}}} is the endogenous regressor,
-\ifelse{html}{\out{K(x)=0.75&#183;(1-x<sup>2</sup>)&#183;I(|x|<=1)}}{\eqn{K(x)=0.75\cdot(1-x^{2})\cdot I(\|x\|<=1)}}
+\ifelse{html}{\out{K(x)=0.75&#183;(1-x<sup>2</sup>)&#183;I(|x|&lt;=1)}}{\eqn{K(x)=0.75\cdot(1-x^{2})\cdot I(\|x\|<=1)}}
 and the bandwidth \eqn{b} is the one proposed by Silverman (1986),
 and is equal to \ifelse{html}{\out{b=0.9&#183;T<sup>-1.5</sup>&#183;min(s, IQR/1.34)}}{\eqn{b=0.9\cdot T^{-1/5}\cdot min(s,IQR/1.34)}}.
 \eqn{IQR} is the interquartile range while \eqn{s} is the data sample standard deviation
@@ -209,7 +210,9 @@ c1.main.coefs <- coef(res.c1, complete = FALSE)
 
 }
 \references{
-Park, S. and Gupta, S., (2012), "Handling Endogenous Regressors by Joint Estimation Using Copulas", Marketing Science, 31(4), 567-86.
+Park, S. and Gupta, S., (2012), "Handling Endogenous Regressors by
+  Joint Estimation Using Copulas",
+  Marketing Science, 31(4), 567-86. \doi{10.1287/mksc.1120.0718}
 
 Qian, Y., Koschmann, A., and Xie, H. (2024). "A Practical Guide to Endogeneity Correction Using Copulas". National Bureau of Economic Research, w32231.
 
@@ -227,4 +230,8 @@ Petrin A, Train K (2010). "A Control Function Approach to Endogeneity in Consume
 \code{\link[REndo:confint.rendo.boots]{confint}} for how confidence intervals are derived
 
 \code{\link[optimx]{optimx}} for possible elements of parameter \code{optimx.arg}
+
+Other copula-based methods: 
+\code{\link{copulaIMA}()}
 }
+\concept{copula-based methods}
